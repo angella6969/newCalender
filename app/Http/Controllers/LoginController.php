@@ -30,7 +30,7 @@ class LoginController extends Controller
             $request->session()->regenerate();
             return redirect('/events');
         } else {
-            return redirect('/login')->with('loginError', 'Silahkan Hubungi Admin untuk mengaktifkan Akun');
+            return redirect('/login')->with('loginError', 'Email atau Password invalid');
         }
     }
 

@@ -106,7 +106,7 @@
     <script>
         @if (Session::has('loginError'))
             iziToast.warning({
-                title: 'Success',
+                title: 'Error',
                 message: '{{ Session::get('loginError') }}',
                 position: 'topRight',
             });

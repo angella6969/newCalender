@@ -18,8 +18,11 @@
                 initialView: 'dayGridMonth',
                 themeSystem: 'bootstrap5',
                 events: `{{ route('events.list') }}`,
-                editable: true,
+                editable: false,
                 dateClick: function(info) {
+
+                    // window.location.href = '/edit/' +  info.dateStr;
+
                     $.ajax({
                         url: `{{ route('events.create') }}`,
                         data: {
@@ -158,4 +161,5 @@
             calendar.render();
         });
     </script>
+
 @endsection

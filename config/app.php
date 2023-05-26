@@ -169,6 +169,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Brian2694\Toastr\ToastrServiceProvider::class,
+        Clockwork\Support\Laravel\ClockworkServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -185,6 +186,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Toastr'  => Brian2694\Toastr\Facades\Toastr::class,
+        'Clockwork' => Clockwork\Support\Laravel\Facade::class,
     ])->toArray(),
 
 ];

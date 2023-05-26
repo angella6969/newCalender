@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EventRequest;
 use App\Models\Event;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class EventController extends Controller
@@ -22,15 +24,15 @@ class EventController extends Controller
         $end = date('Y-m-d', strtotime($request->end));
 
         $events = Event::where('start_date', '>=', $start)
-        ->where('end_date', '<=' , $end)->get()
-        ->map( fn ($item) => [
-            'id' => $item->id,
-            'title' => $item->title,
-            'start' => $item->start_date,
-            'end' => date('Y-m-d',strtotime($item->end_date. '+1 days')),
-            'category' => $item->category,
-            'className' => ['bg-'. $item->category]
-        ]);
+            ->where('end_date', '<=', $end)->get()
+            ->map(fn ($item) => [
+                'id' => $item->id,
+                'title' => $item->title,
+                'start' => $item->start_date,
+                'end' => date('Y-m-d', strtotime($item->end_date . '+1 days')),
+                'category' => $item->category,
+                'className' => ['bg-' . $item->category]
+            ]);
 
         return response()->json($events);
     }
@@ -40,7 +42,12 @@ class EventController extends Controller
      */
     public function create(Event $event)
     {
-        return view('event-form', ['data' => $event, 'action' => route('events.store')]);
+        $a = User::all();
+        return view('event-form', [
+            'data' => $event,
+            'users' => $a,
+            'action' => route('events.store')
+        ]);
     }
 
     /**
@@ -62,9 +69,18 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
+    public function edit1(Event $event,$date)
+    {
+        // $a =Carbon::createFromFormat('Y-m-d', $date);
+        dd($date);
+    }
     public function edit(Event $event)
     {
-        return view('event-form', ['data' => $event, 'action' => route('events.update', $event->id)]);
+        // dd("a");
+        return view('event-form', [
+            'data' => $event,
+            'action' => route('events.update', $event->id)
+        ]);
     }
 
     /**

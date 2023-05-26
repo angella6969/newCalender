@@ -15,11 +15,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        user::factory(10)->create();
         User::create([
             'name' => 'Super Admin',
             'email' => 'superadmin@yahoo.com',
             'password' => Hash::make('123456'),
-
         ]);
         $this->call([
             EventSeeder::class
