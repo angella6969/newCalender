@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EventRequest;
 use App\Models\Event;
 use App\Models\User;
+use App\Models\userPerjalanan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
@@ -75,6 +76,14 @@ class EventController extends Controller
     }
     public function store1(Request $request)
     {
+        $selectedTools = $request->input('select-tools', []);
+        foreach ($selectedTools as $toolId) {
+            $tool = userPerjalanan::find($toolId);
+            // Lakukan validasi atau operasi lain jika diperlukan
+            // Simpan tool ke dalam basis data
+            $tool->save();
+        }
+        
         dd($request);
         $date = $request->route('date');
         // dd($date);

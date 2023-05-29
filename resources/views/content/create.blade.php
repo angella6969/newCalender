@@ -66,23 +66,6 @@
         }
     </script>
     <script>
-        $(document).ready(function() {
-            $('.box').select2();
-        });
-    </script>
-    {{-- <script>
-        $(document).ready(function() {
-            $('#select-tools').selectize({
-                maxItems: null,
-                valueField: 'id',
-                labelField: 'name',
-                searchField: 'name',
-                options: {!! json_encode($users) !!},
-                create: false
-            });
-        });
-    </script> --}}
-    <script>
         $("#remove-button").selectize({
             plugins: ["remove_button"],
             delimiter: ",",

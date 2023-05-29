@@ -12,4 +12,8 @@ class Event extends Model
     {
         return $this->belongsToMany(User::class);
     }
+    public function eventPerjalanan()
+    {
+        return $this->hasMany(userPerjalanan::class);
+    }
 }
