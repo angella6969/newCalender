@@ -7,6 +7,7 @@ use App\Models\Event;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use PhpParser\Node\Stmt\TryCatch;
 
 class EventController extends Controller
 {
@@ -49,6 +50,21 @@ class EventController extends Controller
             'action' => route('events.store')
         ]);
     }
+    public function create1(Event $event)
+    {
+        $a = User::get();
+        $options = $a->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+            ];
+        });
+        // dd($options);
+
+        return view('content.create', [
+            'users' => $options,
+        ]);
+    }
 
     /**
      * Store a newly created resource in storage.
@@ -56,6 +72,32 @@ class EventController extends Controller
     public function store(EventRequest $request, Event $event)
     {
         return $this->update($request, $event);
+    }
+    public function store1(Request $request)
+    {
+        dd($request);
+        $date = $request->route('date');
+        // dd($date);
+        try {
+            $validatedData = $request->validate([
+                'keperluan' => 'required',
+                'asal' => ['required'],
+                'tujuan' => ['required'],
+                'berangkat' => ['required'],
+                'kembali' => ['required'],
+                'select-tools' => ['required'],
+            ]);
+
+            if ($validatedData['berangkat'] > $validatedData['kembali']) {
+                dd('gagal');
+                return back()->with('fail', 'Tanggal Kembali harus lebih besar dari Tanggal Berangkat');
+            } else {
+                dd('sukses');
+                return back()->with('success', 'Data berhasil ditambahkan');
+            }
+        } catch (\Throwable $th) {
+            dd('ini apa');
+        }
     }
 
     /**
@@ -69,14 +111,13 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit1(Event $event,$date)
+    public function edit1(Event $event, $date)
     {
-        // $a =Carbon::createFromFormat('Y-m-d', $date);
+        return view('content.create');
         dd($date);
     }
     public function edit(Event $event)
     {
-        // dd("a");
         return view('event-form', [
             'data' => $event,
             'action' => route('events.update', $event->id)

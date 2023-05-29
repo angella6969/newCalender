@@ -25,4 +25,8 @@ Route::resource('events', EventController::class);
 Route::get('/login',[LoginController::class,'index']);
 Route::post('/login',[LoginController::class,'authenticate']);
 
+Route::get('/create/{date}', [EventController::class, 'create1']);
+Route::post('/create/{date}', [EventController::class, 'store1'])->name('events.store1');;
+
+
 Route::get('/edit/{date}', [EventController::class, 'edit1']);

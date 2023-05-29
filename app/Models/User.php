@@ -41,4 +41,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Event::class);
     }
+    public function selectedItems()
+    {
+        return $this->hasMany(userPerjalanan::class);
+    }
 }

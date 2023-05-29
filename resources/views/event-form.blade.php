@@ -33,7 +33,7 @@
                 </select>
             </div>
         </div> --}}
-        <div class="col-12">
+        {{-- <div class="col-12">
             <div class="mb-3">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" {{ $data->category == 'success' ? 'checked' : null }} type="radio"
@@ -56,8 +56,8 @@
                     <label class="form-check-label" for="category-info">Info</label>
                 </div>
             </div>
-        </div>
-        <div class="col-12">
+        </div> --}}
+        {{-- <div class="col-12">
             <div class="mb-3">
                 <div class="form-check form-switch">
                     <input class="form-check-input" type="checkbox" name="delete" role="switch"
@@ -65,6 +65,6 @@
                     <label class="form-check-label" for="flexSwitchCheckDefault">Delete</label>
                 </div>
             </div>
-        </div>
+        </div> --}}
     </div>
 </x-modal-action>

@@ -4,10 +4,17 @@
         <div class="col-12 mt-3">
             <div id='calendar'></div>
         </div>
+        
+    </div>
+    <div class="row">
+        
     </div>
 
     <div id="modal-action" class="modal" tabindex="-1">
+
     </div>
+
+
     <script>
         const modal = $('#modal-action')
         const csrfToken = $('meta[name=csrf_token]').attr('content')
@@ -21,42 +28,42 @@
                 editable: false,
                 dateClick: function(info) {
 
-                    // window.location.href = '/edit/' +  info.dateStr;
+                    window.location.href = '/create/' +  info.dateStr;
 
-                    $.ajax({
-                        url: `{{ route('events.create') }}`,
-                        data: {
-                            start_date: info.dateStr,
-                            end_date: info.dateStr
-                        },
-                        success: function(res) {
-                            modal.html(res).modal('show')
-                            $('.datepicker').datepicker({
-                                todayHighlight: true,
-                                format: 'yyyy-mm-dd'
-                            });
+                    // $.ajax({
+                    //     url: `{{ route('events.create') }}`,
+                    //     data: {
+                    //         start_date: info.dateStr,
+                    //         end_date: info.dateStr
+                    //     },
+                    //     success: function(res) {
+                    //         modal.html(res).modal('show')
+                    //         $('.datepicker').datepicker({
+                    //             todayHighlight: true,
+                    //             format: 'yyyy-mm-dd'
+                    //         });
 
-                            $('#form-action').on('submit', function(e) {
-                                e.preventDefault()
-                                const form = this
-                                const formData = new FormData(form)
-                                $.ajax({
-                                    url: form.action,
-                                    method: form.method,
-                                    data: formData,
-                                    processData: false,
-                                    contentType: false,
-                                    success: function(res) {
-                                        modal.modal('hide')
-                                        calendar.refetchEvents()
-                                    },
-                                    error: function(res) {
+                    //         $('#form-action').on('submit', function(e) {
+                    //             e.preventDefault()
+                    //             const form = this
+                    //             const formData = new FormData(form)
+                    //             $.ajax({
+                    //                 url: form.action,
+                    //                 method: form.method,
+                    //                 data: formData,
+                    //                 processData: false,
+                    //                 contentType: false,
+                    //                 success: function(res) {
+                    //                     modal.modal('hide')
+                    //                     calendar.refetchEvents()
+                    //                 },
+                    //                 error: function(res) {
 
-                                    }
-                                })
-                            })
-                        }
-                    })
+                    //                 }
+                    //             })
+                    //         })
+                    //     }
+                    // })
                 },
                 eventClick: function({
                     event
@@ -161,5 +168,4 @@
             calendar.render();
         });
     </script>
-
 @endsection
