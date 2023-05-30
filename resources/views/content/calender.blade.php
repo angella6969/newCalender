@@ -1,12 +1,14 @@
 @extends('layout.main')
 @section('container')
     <div class="row">
-        <div class="col-10 mt-3">
-            <div id='calendar'></div>
+        <div class="col-12 mt-3 mb-3">
+            <div class="col-sm-12">
+                <div id='calendar'></div>
+            </div>
         </div>
     </div>
 
-    <div id="modal-action" class="modal" tabindex="-1"></div>
+    {{-- <div id="modal-action" class="modal" tabindex="-1"></div> --}}
 
 
 
@@ -37,33 +39,31 @@
                         <table class="table">
                             <tr>
                                 <td>Keperluan</td>
-                                
+
                                 <td><span id="eventName"></span></td>
                             </tr>
                             <tr>
                                 <td>Kategori</td>
-                                
+
                                 <td><span id="eventCategory"></span></td>
                             </tr>
                             <tr>
                                 <td>Berangkat</td>
-                                
+
                                 <td><span id="eventStarDate"></span></td>
                             </tr>
                             <tr>
                                 <td>Kembali</td>
-                                
+
                                 <td><span id="eventEndDate"></span></td>
                             </tr>
                         </table>
                     </table>
-                    {{-- <p><strong>Nama:</strong> <span id="eventName"></span></p>
-                    <p><strong>Kategori:</strong> <span id="eventCategory"></span></p>
-                    <p><strong>star:</strong> <span id="eventStarDate"></span></p>
-                    <p><strong>end:</strong> <span id="eventEndDate"></span></p> --}}
                 </div>
-                <div>
-                    <button class="success"> edit</button>
+                <div class="d-flex justify-content-center">
+                    <button style="margin: 10px;" type="button" class="btn btn-danger">Hapus</button>
+                    <button style="margin: 10px;" type="button" class="btn btn-warning">Edit</button>
+                    <button style="margin: 10px;" type="button" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </div>

@@ -37,19 +37,19 @@
                         required="required" onfocus="this.type='date'" onmouseover="this.type='date'"
                         onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
                 </div>
-                <div>
-                    <select name="category" class="mb-3 col-12" class="form-select">
+                <div class="col-12">
+                    <select id="normalize" name="category" class="mb-3">
                         <!-- Loop melalui opsi dari database -->
-                        <option value="success" selected>Jaringan Komputer</option>
-                        <option value="info" selected>OP Web Side</option>
-                        <option value="warning" selected>Foto & Vidio</option>
-                        <option value="danger" selected>Inventaris</option>
+                        <option value="" selected>category</option>
+                        <option value="success">Jaringan Komputer</option>
+                        <option value="info">OP Web Side</option>
+                        <option value="warning">Foto & Vidio</option>
+                        <option value="danger">Inventaris</option>
                     </select>
-                </div>
-                <div>
-                    <select id="remove-button" name="selecttools[]" multiple class="mb-3 col-12">
+               
+                    <select id="remove-button" name="selecttools[]" multiple class="mb-3" >
                         <!-- Loop melalui opsi dari database -->
-                        <option value="" selected>awdawd</option>
+                        <option value="" selected>Personil</option>
                         @foreach ($users as $tool)
                             <option value="{{ $tool['id'] }}">{{ $tool['name'] }}</option>
                         @endforeach
@@ -59,11 +59,9 @@
 
 
             <div class="form-group row">
-                <div class="col-md-9 col-sm-9  offset-md-3 ">
-                    {{-- <button type="button" class="btn btn-primary">Cancel</button> --}}
-                    {{-- <button type="reset" onclick="resetSelect()">Reset1</button> --}}
-                    <button class="btn btn-primary" type="reset">Reset</button>
-                    <button type="submit" class="btn btn-success">Submit</button>
+                <div class="d-flex justify-content-center">
+                    <button class="btn btn-primary" style="margin: 10px;" type="reset">Reset</button>
+                    <button type="submit" class="btn btn-success" style="margin: 10px;">Submit</button>
                 </div>
             </div>
         </form>
@@ -112,5 +110,8 @@
                 };
             },
         });
+    </script>
+    <script>
+        $('#normalize').selectize({ normalize: true });
     </script>
 @endsection
