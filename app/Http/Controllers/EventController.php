@@ -29,9 +29,9 @@ class EventController extends Controller
             ->where('end_date', '<=', $end)->get()
             ->map(fn ($item) => [
                 'id' => $item->id,
-                'title' => $item->title,
-                'start' => $item->start_date,
-                'end' => date('Y-m-d', strtotime($item->end_date . '+1 days')),
+                'title' => $item->keperluan,
+                'start' => $item->berangkat,
+                'end' => date('Y-m-d', strtotime($item->kembali . '+1 days')),
                 'category' => $item->category,
                 'className' => ['bg-' . $item->category]
             ]);
@@ -76,26 +76,27 @@ class EventController extends Controller
     }
     public function store1(Request $request)
     {
-        $selectedTools = $request->input('select-tools', []);
-        foreach ($selectedTools as $toolId) {
-            $tool = userPerjalanan::find($toolId);
-            // Lakukan validasi atau operasi lain jika diperlukan
-            // Simpan tool ke dalam basis data
-            $tool->save();
-        }
-        
-        dd($request);
-        $date = $request->route('date');
+
+
+
+        // $date = $request->route('date');
         // dd($date);
-        try {
+        // try {
             $validatedData = $request->validate([
                 'keperluan' => 'required',
                 'asal' => ['required'],
                 'tujuan' => ['required'],
                 'berangkat' => ['required'],
                 'kembali' => ['required'],
-                'select-tools' => ['required'],
             ]);
+
+            
+            $selectedUsers = $request->input('selecttools');
+           
+
+            $event = Event::create($validatedData);
+            $event->event()->attach($selectedUsers);
+           
 
             if ($validatedData['berangkat'] > $validatedData['kembali']) {
                 dd('gagal');
@@ -104,9 +105,9 @@ class EventController extends Controller
                 dd('sukses');
                 return back()->with('success', 'Data berhasil ditambahkan');
             }
-        } catch (\Throwable $th) {
-            dd('ini apa');
-        }
+        // } catch (\Throwable $th) {
+        //     dd('ini apa');
+        // }
     }
 
     /**

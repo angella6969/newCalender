@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('tujuan');
             $table->date('berangkat');
             $table->date('kembali');
+            $table->foreignId('user_id')->nullable();
             $table->timestamps();
         });
     }

@@ -1,7 +1,10 @@
 <?php
 
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\EventSPPDController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\PerjalananController as ControllersPerjalananController;
+use App\Models\PerjalananController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,3 +33,10 @@ Route::post('/create/{date}', [EventController::class, 'store1'])->name('events.
 
 
 Route::get('/edit/{date}', [EventController::class, 'edit1']);
+
+
+
+
+////////////////////////////////////////////////////////////////////////////
+
+Route::resource('/perjalanan', EventSPPDController::class);

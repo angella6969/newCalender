@@ -38,7 +38,7 @@
                         onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
                 </div>
                 <div>
-                    <select id="remove-button" name="select-tools" multiple class="mb-3 col-12">
+                    <select id="remove-button" name="selecttools[]" multiple class="mb-3 col-12">
                         <!-- Loop melalui opsi dari database -->
                         @foreach ($users as $tool)
                             <option value="{{ $tool['id'] }}">{{ $tool['name'] }}</option>
