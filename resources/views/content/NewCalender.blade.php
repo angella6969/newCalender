@@ -16,7 +16,7 @@
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',
                 themeSystem: 'bootstrap5',
-                events: `{{ route('events.list') }}`,
+                events: `{{ route('perjalanan.list') }}`,
                 editable: false,
                 dateClick: function(info) {
                     window.location.href = '/create/' + info.dateStr;

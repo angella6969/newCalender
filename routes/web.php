@@ -40,3 +40,4 @@ Route::get('/edit/{date}', [EventController::class, 'edit1']);
 ////////////////////////////////////////////////////////////////////////////
 
 Route::resource('/perjalanan', EventSPPDController::class);
+Route::get('perjalanan/list', [EventSPPDController::class, 'listEvent'])->name('perjalanan.list');

@@ -14,8 +14,12 @@ class userPerjalanan extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function event()
+    public function userPerjalananToEvent()
     {
-        return $this->belongsTo(Event::class);
+        return $this->hasMany(EventSPPD::class);
+    }
+    public function userPerjalananToUser()
+    {
+        return $this->hasMany(user::class);
     }
 }

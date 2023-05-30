@@ -45,4 +45,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(userPerjalanan::class);
     }
+    public function userTouserPerjalanan()
+    {
+        return $this->belongsTo(userPerjalanan::class);
+    }
 }

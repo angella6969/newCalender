@@ -1,20 +1,28 @@
 @extends('layout.main')
 @section('container')
     <div class="row">
-        <div class="col-12 mt-3">
+        <div class="col-8 mt-3">
             <div id='calendar'></div>
         </div>
-        
+
     </div>
     <div class="row">
-        
+
     </div>
 
     <div id="modal-action" class="modal" tabindex="-1">
 
     </div>
 
-
+    <script>
+        @if (Session::has('success'))
+            iziToast.success({
+                title: 'success',
+                message: '{{ Session::get('success') }}',
+                position: 'topRight',
+            });
+        @endif
+    </script>
     <script>
         const modal = $('#modal-action')
         const csrfToken = $('meta[name=csrf_token]').attr('content')
@@ -28,7 +36,7 @@
                 editable: false,
                 dateClick: function(info) {
 
-                    window.location.href = '/create/' +  info.dateStr;
+                    window.location.href = '/create/' + info.dateStr;
 
                     // $.ajax({
                     //     url: `{{ route('events.create') }}`,

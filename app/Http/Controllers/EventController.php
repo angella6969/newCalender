@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\EventRequest;
 use App\Models\Event;
+use App\Models\EventSPPD;
 use App\Models\User;
 use App\Models\userPerjalanan;
 use Carbon\Carbon;
@@ -25,13 +26,13 @@ class EventController extends Controller
         $start = date('Y-m-d', strtotime($request->start));
         $end = date('Y-m-d', strtotime($request->end));
 
-        $events = Event::where('start_date', '>=', $start)
+        $events = EventSPPD::where('start_date', '>=', $start)
             ->where('end_date', '<=', $end)->get()
             ->map(fn ($item) => [
                 'id' => $item->id,
-                'title' => $item->keperluan,
-                'start' => $item->berangkat,
-                'end' => date('Y-m-d', strtotime($item->kembali . '+1 days')),
+                'title' => $item->title,
+                'start' => $item->start_date,
+                'end' => date('Y-m-d', strtotime($item->end_date . '+1 days')),
                 'category' => $item->category,
                 'className' => ['bg-' . $item->category]
             ]);
@@ -76,38 +77,40 @@ class EventController extends Controller
     }
     public function store1(Request $request)
     {
-
-
-
-        // $date = $request->route('date');
-        // dd($date);
-        // try {
+        try {
             $validatedData = $request->validate([
-                'keperluan' => 'required',
+                'title' => 'required',
                 'asal' => ['required'],
                 'tujuan' => ['required'],
-                'berangkat' => ['required'],
-                'kembali' => ['required'],
+                'start_date' => ['required'],
+                'end_date' => ['required'],
+                'category' => ['required'],
             ]);
 
-            
+            $event = EventSPPD::create($validatedData);
+            $eventId = $event->id;
+
             $selectedUsers = $request->input('selecttools');
-           
 
-            $event = Event::create($validatedData);
-            $event->event()->attach($selectedUsers);
-           
-
-            if ($validatedData['berangkat'] > $validatedData['kembali']) {
-                dd('gagal');
-                return back()->with('fail', 'Tanggal Kembali harus lebih besar dari Tanggal Berangkat');
-            } else {
-                dd('sukses');
-                return back()->with('success', 'Data berhasil ditambahkan');
+            foreach ($selectedUsers as $userId) {
+                userPerjalanan::create([
+                    'event_id' => $eventId,
+                    'user_id' => $userId,
+                ]);
             }
-        // } catch (\Throwable $th) {
-        //     dd('ini apa');
-        // }
+
+
+
+            if ($validatedData['start_date'] > $validatedData['end_date']) {
+                // dd('gagal');
+                return back()->with('loginError', 'Tanggal Kembali harus lebih besar dari Tanggal Berangkat');
+            } else {
+                // dd('sukses');
+                return redirect('/events')->with('success', 'Data berhasil ditambahkan');
+            }
+        } catch (\Throwable $th) {
+            return back()->with('fail', 'ada yang salah');
+        }
     }
 
     /**

@@ -8,12 +8,12 @@
         @php
             $date = '2023-05-05';
         @endphp
-        <form class="form-label-left input_mask" method="post" action="{{ route('events.store1', ['date' => $date]) }}">
+        <form id="my-form" class="form-label-left input_mask" method="post" action="{{ route('events.store1', ['date' => $date]) }}">
             @csrf
             <div class="row">
                 <div class="col-md-12 col-sm-6 mb-3">
                     <label for="">Keperluan</label>
-                    <input type="text" class="form-control -left" name="keperluan" placeholder="Judul">
+                    <input type="text" class="form-control -left" name="title" placeholder="Judul">
                 </div>
             </div>
             <div class="row">
@@ -27,19 +27,29 @@
                 </div>
                 <div class="col-md-6 col-sm-6 mb-3">
                     <label for="">Tanggal Berangkat</label>
-                    <input class="date-picker form-control" name="berangkat" placeholder="dd-mm-yyyy" type="text"
+                    <input class="date-picker form-control" name="start_date" placeholder="dd-mm-yyyy" type="text"  value="{{ Request::segment(2) }}"
                         required="required" onfocus="this.type='date'" onmouseover="this.type='date'"
                         onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
                 </div>
                 <div class="col-md-6 col-sm-6 mb-3">
                     <label for="">Tanggal Kembali</label>
-                    <input class="date-picker form-control" name="kembali" placeholder="dd-mm-yyyy" type="text"
+                    <input class="date-picker form-control" name="end_date" placeholder="dd-mm-yyyy" type="text"  
                         required="required" onfocus="this.type='date'" onmouseover="this.type='date'"
                         onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
                 </div>
                 <div>
+                    <select name="category" class="mb-3 col-12" class="form-select">
+                        <!-- Loop melalui opsi dari database -->
+                        <option value="success" selected>Jaringan Komputer</option>
+                        <option value="info" selected>OP Web Side</option>
+                        <option value="warning" selected>Foto & Vidio</option>
+                        <option value="danger" selected>Inventaris</option>
+                    </select>
+                </div>
+                <div>
                     <select id="remove-button" name="selecttools[]" multiple class="mb-3 col-12">
                         <!-- Loop melalui opsi dari database -->
+                        <option value="" selected>awdawd</option>
                         @foreach ($users as $tool)
                             <option value="{{ $tool['id'] }}">{{ $tool['name'] }}</option>
                         @endforeach
@@ -50,7 +60,8 @@
 
             <div class="form-group row">
                 <div class="col-md-9 col-sm-9  offset-md-3 ">
-                    <button type="button" class="btn btn-primary">Cancel</button>
+                    {{-- <button type="button" class="btn btn-primary">Cancel</button> --}}
+                    {{-- <button type="reset" onclick="resetSelect()">Reset1</button> --}}
                     <button class="btn btn-primary" type="reset">Reset</button>
                     <button type="submit" class="btn btn-success">Submit</button>
                 </div>
@@ -58,6 +69,30 @@
         </form>
     </div>
     {{-- </div> --}}
+    <script>
+        @if (Session::has('loginError'))
+            iziToast.warning({
+                title: 'Error',
+                message: '{{ Session::get('loginError') }}',
+                position: 'topRight',
+            });
+        @endif
+    </script>
+    <script>
+        @if (Session::has('fail'))
+            iziToast.error({
+                title: 'Error',
+                message: '{{ Session::get('fail') }}',
+                position: 'topRight',
+            });
+        @endif
+    </script>
+
+    <script>
+        function resetSelect() {
+          document.getElementById('remove-button').selectedIndex = -1;
+        }
+      </script>
     <script>
         function timeFunctionLong(input) {
             setTimeout(function() {

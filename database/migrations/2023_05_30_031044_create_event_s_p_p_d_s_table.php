@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('event_s_p_p_d_s', function (Blueprint $table) {
+      Schema::create('event_s_p_p_d_s', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->date('start');
-            $table->date('end');
-            $table->string('category');
+            $table->string('asal')->nullable();
+            $table->string('tujuan')->nullable();
+            $table->date('start_date');
+            $table->date('end_date');
+            $table->string('category')->nullable();
             $table->timestamps();
         });
     }
