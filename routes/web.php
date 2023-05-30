@@ -34,10 +34,14 @@ Route::post('/create/{date}', [EventController::class, 'store1'])->name('events.
 
 Route::get('/edit/{date}', [EventController::class, 'edit1']);
 
+Route::get('perjalanan/{id}/edit', [EventController::class, 'edit']);
+Route::get('perjalanan/{id}', [EventController::class, 'show']);
 
 
 
 ////////////////////////////////////////////////////////////////////////////
 
-Route::resource('/perjalanan', EventSPPDController::class);
+// Route::resource('/perjalanan', EventSPPDController::class);
 Route::get('perjalanan/list', [EventSPPDController::class, 'listEvent'])->name('perjalanan.list');
+
+

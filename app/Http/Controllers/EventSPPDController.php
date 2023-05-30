@@ -58,7 +58,7 @@ class EventSPPDController extends Controller
      */
     public function show(EventSPPD $eventSPPD)
     {
-        //
+        dd('a');
     }
 
     /**
@@ -66,7 +66,7 @@ class EventSPPDController extends Controller
      */
     public function edit(EventSPPD $eventSPPD)
     {
-        //
+        dd('a');
     }
 
     /**

@@ -116,9 +116,13 @@ class EventController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Event $event)
+    public function show(Event $event,$id)
     {
-        //
+        $event = EventSPPD::findOrFail($id);
+
+        return response()->json([
+            'event' => $event
+        ]);
     }
 
     /**
@@ -126,11 +130,12 @@ class EventController extends Controller
      */
     public function edit1(Event $event, $date)
     {
-        return view('content.create');
-        dd($date);
+        dd('a');
+        // return view('content.create');
     }
     public function edit(Event $event)
     {
+        dd(' ini adalah edit');
         return view('event-form', [
             'data' => $event,
             'action' => route('events.update', $event->id)
