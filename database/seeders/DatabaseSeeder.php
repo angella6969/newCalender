@@ -21,8 +21,5 @@ class DatabaseSeeder extends Seeder
             'email' => 'superadmin@yahoo.com',
             'password' => Hash::make('123456'),
         ]);
-        $this->call([
-            EventSPPDSeeder::class
-        ]);
     }
 }

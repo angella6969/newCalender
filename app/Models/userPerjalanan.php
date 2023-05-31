@@ -22,4 +22,8 @@ class userPerjalanan extends Model
     {
         return $this->hasMany(user::class);
     }
+    public function event()
+    {
+        return $this->belongsTo(EventSPPD::class, 'event_id');
+    }
 }

@@ -32,16 +32,21 @@ Route::get('/create/{date}', [EventController::class, 'create1']);
 Route::post('/create/{date}', [EventController::class, 'store1'])->name('events.store1');;
 
 
-Route::get('/edit/{date}', [EventController::class, 'edit1']);
+Route::get('/edit', [EventController::class, 'edit1']);
 
-Route::get('perjalanan/{id}/edit', [EventController::class, 'edit']);
+// Route::get('perjalanan/{id}/edit', [EventController::class, 'edit']);
+
 Route::get('perjalanan/{id}', [EventController::class, 'show']);
+
+Route::delete('perjalanan/{id}', [EventController::class, 'destroy']);
+
+// Route::delete('perjalanan/{id}', 'EventController@destroy');
 
 
 
 ////////////////////////////////////////////////////////////////////////////
 
 // Route::resource('/perjalanan', EventSPPDController::class);
-Route::get('perjalanan/list', [EventSPPDController::class, 'listEvent'])->name('perjalanan.list');
+// Route::get('perjalanan/list', [EventSPPDController::class, 'listEvent'])->name('perjalanan.list');
 
 

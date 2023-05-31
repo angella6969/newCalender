@@ -77,13 +77,22 @@
                     </table>
                 </div>
                 <div class="d-flex justify-content-center mb-3">
-                    <button style="margin: 10px;" type="button" class="btn btn-danger">Hapus</button>
+                    <button type="button" class="btn btn-danger" id="deleteEvent">Delete</button>
+                    <a class="btn btn-primary" href="/edit" role="button">Edit</a>
+                    {{-- <button style="margin: 10px;" type="button" class="btn btn-danger">Hapus</button>
                     <button style="margin: 10px;" type="button" class="btn btn-warning">Edit</button>
-                    <button style="margin: 10px;" type="button" class="btn btn-primary">Save</button>
+                    <button style="margin: 10px;" type="button" class="btn btn-primary">Save</button> --}}
                 </div>
             </div>
         </div>
     </div>
+    {{-- <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var myModal = document.getElementById('myModal');
+            var modalId = myModal.getAttribute('id');
+            console.log(modalId); // Output: "myModal"
+        });
+    </script> --}}
 
     <script>
         @if (Session::has('success'))
@@ -95,7 +104,7 @@
         @endif
     </script>
     <script>
-        const modal = $('#modal-action')
+        // const modal = $('#modal-action')
         const csrfToken = $('meta[name=csrf_token]').attr('content')
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -111,16 +120,12 @@
                 },
 
                 eventClick: function(info) {
-                    // var eventId = info.event.id; // Mendapatkan ID event yang dipilih
-                    // window.location.href = '/perjalanan/' + eventId + '/edit';
-
-
 
                     var eventId = info.event.id; // Mendapatkan ID event yang diklik
 
                     // Mengambil data event dari database menggunakan AJAX
                     $.ajax({
-                        url: '/perjalanan/' + eventId, // Ganti dengan URL endpoint yang sesuai
+                        url: '/perjalanan/' + eventId,
                         method: 'GET',
                         success: function(response) {
                             var eventData = response
@@ -129,8 +134,8 @@
 
                             var personilTableBody = document.getElementById(
                                 'personilTableBody');
-                            personilTableBody.innerHTML =
-                                ''; // Bersihkan konten tabel sebelum mengisi data
+                            // Bersihkan konten tabel sebelum mengisi data
+                            personilTableBody.innerHTML = '';
 
                             personilData.forEach(function(personil) {
                                 var row = document.createElement('tr');
@@ -151,16 +156,22 @@
                             // Mengisi konten modal dengan data dari event
                             document.getElementById('eventName').textContent = eventData
                                 .title;
+
                             document.getElementById('eventCategory').textContent = eventData
                                 .category;
+
                             document.getElementById('eventStarDate').textContent = eventData
                                 .start_date;
+
                             document.getElementById('eventEndDate').textContent = eventData
                                 .end_date;
+
                             document.getElementById('eventAsal').textContent = eventData
                                 .asal;
+
                             document.getElementById('eventTujuan').textContent = eventData
                                 .tujuan;
+
                             // Menampilkan modal
                             $('#eventModal').modal('show');
                         },
@@ -168,80 +179,31 @@
                             console.log('Gagal mengambil data event dari database.');
                         }
                     });
+
+                    // Menambahkan event listener untuk tombol delete
+                    document.getElementById('deleteEvent').addEventListener('click', function() {
+                        // Mengirim permintaan delete ke server menggunakan AJAX
+                        $.ajax({
+                            url: '/perjalanan/' +
+                                eventId, // Ganti dengan URL endpoint delete yang sesuai
+                            method: 'DELETE',
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                    'content')
+                            },
+                            success: function(response) {
+                                console.log('Event berhasil dihapus');
+                                // Lakukan tindakan lain setelah berhasil menghapus event
+                                // Contoh: Refresh halaman atau update tampilan
+                                location
+                                    .reload(); // Contoh: Me-refresh halaman setelah menghapus event
+                            },
+                            error: function() {
+                                console.log('Gagal menghapus event');
+                            }
+                        });
+                    });
                 },
-
-                eventDrop: function(info) {
-                    const event = info.event
-                    $.ajax({
-                        url: `{{ url('events') }}/${event.id}`,
-                        method: 'put',
-                        data: {
-                            id: event.id,
-                            start_date: event.startStr,
-                            end_date: event.end.toISOString().substring(0, 10),
-                            title: event.title,
-                            category: event.extendedProps.category
-                        },
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken,
-                            accept: 'application/json'
-                        },
-                        success: function(res) {
-                            iziToast.success({
-                                title: 'Success',
-                                message: res.message,
-                                position: 'topRight'
-                            });
-                        },
-                        error: function(res) {
-                            const message = res.responseJSON.message
-                            info.revert()
-                            iziToast.error({
-                                title: 'Error',
-                                message: message ?? 'Something wrong',
-                                position: 'topRight'
-                            });
-                        }
-                    })
-                },
-                eventResize: function(info) {
-                    const {
-                        event
-                    } = info
-                    $.ajax({
-                        url: `{{ url('events') }}/${event.id}`,
-                        method: 'put',
-                        data: {
-                            id: event.id,
-                            start_date: event.startStr,
-                            end_date: event.end.toISOString().substring(0, 10),
-                            title: event.title,
-                            category: event.extendedProps.category
-                        },
-                        headers: {
-                            'X-CSRF-TOKEN': csrfToken,
-                            accept: 'application/json'
-                        },
-                        success: function(res) {
-                            iziToast.success({
-                                title: 'Success',
-                                message: res.message,
-                                position: 'topRight'
-                            });
-                        },
-                        error: function(res) {
-                            const message = res.responseJSON.message
-                            info.revert()
-                            iziToast.error({
-                                title: 'Error',
-                                message: message ?? 'Something wrong',
-                                position: 'topRight'
-                            });
-                        }
-                    })
-                }
-
-
             });
             calendar.render();
         });

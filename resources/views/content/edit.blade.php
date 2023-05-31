@@ -8,8 +8,7 @@
         @php
             $date = '2023-05-05';
         @endphp
-        <form id="my-form" class="form-label-left input_mask" method="post"
-            action="{{ route('events.store1', ['date' => $date]) }}">
+        <form id="my-form" class="form-label-left input_mask" method="post" action="{{ route('events.store1', ['date' => $date]) }}">
             @csrf
             <div class="row">
                 <div class="col-md-12 col-sm-6 mb-3">
@@ -28,14 +27,13 @@
                 </div>
                 <div class="col-md-6 col-sm-6 mb-3">
                     <label for="">Tanggal Berangkat</label>
-                    <input class="date-picker form-control" name="start_date" placeholder="dd-mm-yyyy" type="text"
-                        value="{{ Request::segment(2) }}" required="required" onfocus="this.type='date'"
-                        onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'"
-                        onmouseout="timeFunctionLong(this)">
+                    <input class="date-picker form-control" name="start_date" placeholder="dd-mm-yyyy" type="text"  value="{{ Request::segment(2) }}"
+                        required="required" onfocus="this.type='date'" onmouseover="this.type='date'"
+                        onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
                 </div>
                 <div class="col-md-6 col-sm-6 mb-3">
                     <label for="">Tanggal Kembali</label>
-                    <input class="date-picker form-control" name="end_date" placeholder="dd-mm-yyyy" type="text"
+                    <input class="date-picker form-control" name="end_date" placeholder="dd-mm-yyyy" type="text"  
                         required="required" onfocus="this.type='date'" onmouseover="this.type='date'"
                         onclick="this.type='date'" onblur="this.type='text'" onmouseout="timeFunctionLong(this)">
                 </div>
@@ -48,8 +46,8 @@
                         <option value="warning">Foto & Vidio</option>
                         <option value="danger">Inventaris</option>
                     </select>
-
-                    <select id="remove-button" name="selecttools[]" multiple class="mb-3">
+               
+                    <select id="remove-button" name="selecttools[]" multiple class="mb-3" >
                         <!-- Loop melalui opsi dari database -->
                         <option value="" selected>Personil</option>
                         @foreach ($users as $tool)
@@ -67,7 +65,6 @@
                 </div>
             </div>
         </form>
-
     </div>
     {{-- </div> --}}
     <script>
@@ -86,23 +83,14 @@
                 message: '{{ Session::get('fail') }}',
                 position: 'topRight',
             });
-            @if (session('users'))
-                <
-                ul >
-                    @foreach (session('users') as $user)
-                        <
-                        li > {{ $user->name }} < /li>
-                    @endforeach <
-                    /ul>
-            @endif
         @endif
     </script>
 
     <script>
         function resetSelect() {
-            document.getElementById('remove-button').selectedIndex = -1;
+          document.getElementById('remove-button').selectedIndex = -1;
         }
-    </script>
+      </script>
     <script>
         function timeFunctionLong(input) {
             setTimeout(function() {
@@ -124,8 +112,6 @@
         });
     </script>
     <script>
-        $('#normalize').selectize({
-            normalize: true
-        });
+        $('#normalize').selectize({ normalize: true });
     </script>
 @endsection

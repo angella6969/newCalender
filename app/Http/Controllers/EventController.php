@@ -75,6 +75,8 @@ class EventController extends Controller
     {
         return $this->update($request, $event);
     }
+
+
     public function store1(Request $request)
     {
         try {
@@ -85,40 +87,69 @@ class EventController extends Controller
                 'start_date' => ['required'],
                 'end_date' => ['required'],
                 'category' => ['required'],
+                'selecttools' => ['required'],
             ]);
-        
-            $event = EventSPPD::create($validatedData);
-            $eventId = $event->id;
-        
-            $selectedUsers = $request->input('selecttools');
-            $userPerjalananData = [];
-        
-            foreach ($selectedUsers as $userId) {
-                $userPerjalananData[] = [
-                    'event_id' => $eventId,
-                    'user_id' => $userId,
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ];
-            }
-        
-            userPerjalanan::insert($userPerjalananData);
-        
-            if ($validatedData['start_date'] > $validatedData['end_date']) {
-                return back()->with('loginError', 'Tanggal Kembali harus lebih besar dari Tanggal Berangkat');
-            } else {
-                return redirect('/events')->with('success', 'Data berhasil ditambahkan');
+
+            $cekEvent = EventSPPD::where('start_date', '>=', $validatedData['start_date'])
+                ->where('end_date', '<=', $validatedData['end_date'])
+                ->pluck('id');
+
+            if ($cekEvent != null) {
+
+                $selectedUsers = $validatedData['selecttools'];
+
+                $cekUser = userPerjalanan::whereHas('event', function ($query) use ($validatedData) {
+                    $query->where('start_date', '>=', $validatedData['start_date'])
+                        ->where('end_date', '<=', $validatedData['end_date']);
+                })->pluck('user_id');
+
+                $existingUsers = $cekUser->toArray();
+
+
+                $commonUsers = array_intersect($selectedUsers, $existingUsers);
+                
+                if (!empty($commonUsers)) {
+
+                    $existingUserNames = User::whereIn('id', $existingUsers)->pluck('name')->toArray();
+                    $message = 'User ' . implode(', ', $existingUserNames) . ' sudah dalam perjalanan';
+                    return back()->with('fail', $message);
+
+                } else {
+                    $event = EventSPPD::create($validatedData);
+                    $eventId = $event->id;
+
+                    $selectedUsers = $request->input('selecttools');
+                    $userPerjalananData = [];
+
+
+
+                    foreach ($selectedUsers as $userId) {
+                        $userPerjalananData[] = [
+                            'event_id' => $eventId,
+                            'user_id' => $userId,
+                            'created_at' => now(),
+                            'updated_at' => now(),
+                        ];
+                    }
+
+
+                    if ($validatedData['start_date'] > $validatedData['end_date']) {
+                        return back()->with('loginError', 'Tanggal Kembali harus lebih besar dari Tanggal Berangkat');
+                    } else {
+                        userPerjalanan::insert($userPerjalananData);
+                        return redirect('/events')->with('success', 'Data berhasil ditambahkan');
+                    }
+                }
             }
         } catch (\Throwable $th) {
             return back()->with('fail', 'Ada yang salah');
         }
-        
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Event $event,$id)
+    public function show(Event $event, $id)
     {
         $event = EventSPPD::findOrFail($id);
         $personil = User::whereIn('id', function ($query) use ($id) {
@@ -136,10 +167,10 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit1(Event $event, $date)
+    public function edit1(Event $event)
     {
-        dd('a');
-        // return view('content.create');
+        // dd('a');
+        return view('content.edit');
     }
     public function edit(Event $event)
     {
@@ -174,12 +205,24 @@ class EventController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Event $event)
+    public function destroy($id)
     {
-        $event->delete();
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Delete data successfully'
-        ]);
+        // Menghapus data di tabel "user_perjalanans" berdasarkan event_id
+        $result = userPerjalanan::where('event_id', $id)->delete();
+
+        if ($result) {
+            // Menghapus data di tabel "EventSPPD" berdasarkan ID
+            EventSPPD::where('id', $id)->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Event berhasil dihapus'
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menghapus event'
+            ]);
+        }
     }
 }
