@@ -86,31 +86,33 @@ class EventController extends Controller
                 'end_date' => ['required'],
                 'category' => ['required'],
             ]);
-
+        
             $event = EventSPPD::create($validatedData);
             $eventId = $event->id;
-
+        
             $selectedUsers = $request->input('selecttools');
-
+            $userPerjalananData = [];
+        
             foreach ($selectedUsers as $userId) {
-                userPerjalanan::create([
+                $userPerjalananData[] = [
                     'event_id' => $eventId,
                     'user_id' => $userId,
-                ]);
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
             }
-
-
-
+        
+            userPerjalanan::insert($userPerjalananData);
+        
             if ($validatedData['start_date'] > $validatedData['end_date']) {
-                // dd('gagal');
                 return back()->with('loginError', 'Tanggal Kembali harus lebih besar dari Tanggal Berangkat');
             } else {
-                // dd('sukses');
                 return redirect('/events')->with('success', 'Data berhasil ditambahkan');
             }
         } catch (\Throwable $th) {
-            return back()->with('fail', 'ada yang salah');
+            return back()->with('fail', 'Ada yang salah');
         }
+        
     }
 
     /**
@@ -119,9 +121,15 @@ class EventController extends Controller
     public function show(Event $event,$id)
     {
         $event = EventSPPD::findOrFail($id);
+        $personil = User::whereIn('id', function ($query) use ($id) {
+            $query->select('user_id')
+                ->from('user_perjalanans')
+                ->where('event_id', $id);
+        })->get();
 
         return response()->json([
-            'event' => $event
+            'event' => $event,
+            'personil' => $personil
         ]);
     }
 

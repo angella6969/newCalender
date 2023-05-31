@@ -18,7 +18,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="eventModalLabel">Detail Event</h5>
+                    <h5 class="modal-title" id="eventModalLabel">Detail Perjalanan</h5>
                 </div>
 
                 <style>
@@ -39,28 +39,44 @@
                         <table class="table">
                             <tr>
                                 <td>Keperluan</td>
-
                                 <td><span id="eventName"></span></td>
                             </tr>
                             <tr>
                                 <td>Kategori</td>
-
                                 <td><span id="eventCategory"></span></td>
                             </tr>
                             <tr>
                                 <td>Berangkat</td>
-
                                 <td><span id="eventStarDate"></span></td>
                             </tr>
                             <tr>
                                 <td>Kembali</td>
-
                                 <td><span id="eventEndDate"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Berangkat dari</td>
+                                <td><span id="eventAsal"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Tujuan </td>
+                                <td><span id="eventTujuan"></span></td>
                             </tr>
                         </table>
                     </table>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Personil Name</th>
+                                <!-- Tambahkan kolom-kolom lainnya sesuai kebutuhan -->
+                            </tr>
+                        </thead>
+                        <tbody id="personilTableBody">
+                            <!-- Data personil akan ditampilkan di sini -->
+                        </tbody>
+                    </table>
                 </div>
-                <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content-center mb-3">
                     <button style="margin: 10px;" type="button" class="btn btn-danger">Hapus</button>
                     <button style="margin: 10px;" type="button" class="btn btn-warning">Edit</button>
                     <button style="margin: 10px;" type="button" class="btn btn-primary">Save</button>
@@ -98,6 +114,8 @@
                     // var eventId = info.event.id; // Mendapatkan ID event yang dipilih
                     // window.location.href = '/perjalanan/' + eventId + '/edit';
 
+
+
                     var eventId = info.event.id; // Mendapatkan ID event yang diklik
 
                     // Mengambil data event dari database menggunakan AJAX
@@ -107,6 +125,28 @@
                         success: function(response) {
                             var eventData = response
                                 .event; // Mendapatkan data event dari response
+                            var personilData = response.personil;
+
+                            var personilTableBody = document.getElementById(
+                                'personilTableBody');
+                            personilTableBody.innerHTML =
+                                ''; // Bersihkan konten tabel sebelum mengisi data
+
+                            personilData.forEach(function(personil) {
+                                var row = document.createElement('tr');
+
+                                // var emailCell = document.createElement('td');
+                                // emailCell.textContent = personil.email;
+                                // row.appendChild(emailCell);
+
+                                var nameCell = document.createElement('td');
+                                nameCell.textContent = personil.name;
+                                row.appendChild(nameCell);
+
+                                // Tambahkan kolom-kolom lainnya sesuai kebutuhan
+
+                                personilTableBody.appendChild(row);
+                            });
 
                             // Mengisi konten modal dengan data dari event
                             document.getElementById('eventName').textContent = eventData
@@ -117,6 +157,10 @@
                                 .start_date;
                             document.getElementById('eventEndDate').textContent = eventData
                                 .end_date;
+                            document.getElementById('eventAsal').textContent = eventData
+                                .asal;
+                            document.getElementById('eventTujuan').textContent = eventData
+                                .tujuan;
                             // Menampilkan modal
                             $('#eventModal').modal('show');
                         },
