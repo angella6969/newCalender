@@ -14,17 +14,17 @@
             <div class="row">
                 <div class="col-md-12 col-sm-6 mb-3">
                     <label for="">Keperluan</label>
-                    <input type="text" class="form-control -left" name="title" placeholder="Judul">
+                    <input type="text" class="form-control -left" id="title" name="title" placeholder="Judul" value="{{ old('title') }}" required>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-6 mb-3">
                     <label for="">Perjalanan Dari</label>
-                    <input type="text" class="form-control -left" name="asal" placeholder="Perjalanan Dari">
+                    <input type="text" class="form-control -left" id="asal" name="asal" placeholder="Perjalanan Dari"  value="{{ old('asal') }}" required>
                 </div>
                 <div class="col-md-6 col-sm-6 mb-3">
                     <label for="">Perjalanan Ke</label>
-                    <input type="text" class="form-control" name="tujuan" placeholder="Perjalanan Ke">
+                    <input type="text" class="form-control" id="tujuan" name="tujuan" placeholder="Perjalanan Ke"  value="{{ old('tujuan') }}" required>
                 </div>
                 <div class="col-md-6 col-sm-6 mb-3">
                     <label for="">Tanggal Berangkat</label>

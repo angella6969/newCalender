@@ -32,7 +32,7 @@ Route::get('/create/{date}', [EventController::class, 'create1']);
 Route::post('/create/{date}', [EventController::class, 'store1'])->name('events.store1');;
 
 
-Route::get('/edit', [EventController::class, 'edit1']);
+Route::get('/edit/{id}', [EventController::class, 'edit1']);
 
 // Route::get('perjalanan/{id}/edit', [EventController::class, 'edit']);
 

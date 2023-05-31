@@ -43,15 +43,15 @@ class EventController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(Event $event)
-    {
-        $a = User::all();
-        return view('event-form', [
-            'data' => $event,
-            'users' => $a,
-            'action' => route('events.store')
-        ]);
-    }
+    // public function create(Event $event)
+    // {
+    //     $a = User::all();
+    //     return view('event-form', [
+    //         'data' => $event,
+    //         'users' => $a,
+    //         'action' => route('events.store')
+    //     ]);
+    // }
     public function create1(Event $event)
     {
         $a = User::get();
@@ -71,10 +71,10 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(EventRequest $request, Event $event)
-    {
-        return $this->update($request, $event);
-    }
+    // public function store(EventRequest $request, Event $event)
+    // {
+    //     return $this->update($request, $event);
+    // }
 
 
     public function store1(Request $request)
@@ -167,19 +167,23 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit1(Event $event)
+    public function edit1(Event $event,$id)
     {
-        // dd('a');
-        return view('content.edit');
-    }
-    public function edit(Event $event)
-    {
-        dd(' ini adalah edit');
-        return view('event-form', [
-            'data' => $event,
-            'action' => route('events.update', $event->id)
+        dd('a');
+
+        return view('content.edit',[
+            'event' => EventSPPD::all(),
+
         ]);
     }
+    // public function edit(Event $event)
+    // {
+    //     dd(' ini adalah edit');
+    //     return view('event-form', [
+    //         'data' => $event,
+    //         'action' => route('events.update', $event->id)
+    //     ]);
+    // }
 
     /**
      * Update the specified resource in storage.

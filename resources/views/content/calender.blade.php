@@ -41,10 +41,10 @@
                                 <td>Keperluan</td>
                                 <td><span id="eventName"></span></td>
                             </tr>
-                            <tr>
+                            {{-- <tr>
                                 <td>Kategori</td>
                                 <td><span id="eventCategory"></span></td>
-                            </tr>
+                            </tr> --}}
                             <tr>
                                 <td>Berangkat</td>
                                 <td><span id="eventStarDate"></span></td>
@@ -78,21 +78,11 @@
                 </div>
                 <div class="d-flex justify-content-center mb-3">
                     <button type="button" class="btn btn-danger" id="deleteEvent">Delete</button>
-                    <a class="btn btn-primary" href="/edit" role="button">Edit</a>
-                    {{-- <button style="margin: 10px;" type="button" class="btn btn-danger">Hapus</button>
-                    <button style="margin: 10px;" type="button" class="btn btn-warning">Edit</button>
-                    <button style="margin: 10px;" type="button" class="btn btn-primary">Save</button> --}}
+                    {{-- <a class="btn btn-primary" href="/edit/{{$id}}" role="button">Edit</a> --}}
                 </div>
             </div>
         </div>
     </div>
-    {{-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var myModal = document.getElementById('myModal');
-            var modalId = myModal.getAttribute('id');
-            console.log(modalId); // Output: "myModal"
-        });
-    </script> --}}
 
     <script>
         @if (Session::has('success'))
@@ -157,8 +147,8 @@
                             document.getElementById('eventName').textContent = eventData
                                 .title;
 
-                            document.getElementById('eventCategory').textContent = eventData
-                                .category;
+                            // document.getElementById('eventCategory').textContent = eventData
+                            //     .category;
 
                             document.getElementById('eventStarDate').textContent = eventData
                                 .start_date;

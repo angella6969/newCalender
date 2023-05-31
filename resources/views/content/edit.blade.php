@@ -50,9 +50,9 @@
                     <select id="remove-button" name="selecttools[]" multiple class="mb-3" >
                         <!-- Loop melalui opsi dari database -->
                         <option value="" selected>Personil</option>
-                        @foreach ($users as $tool)
+                        {{-- @foreach ($users as $tool)
                             <option value="{{ $tool['id'] }}">{{ $tool['name'] }}</option>
-                        @endforeach
+                        @endforeach --}}
                     </select>
                 </div>
             </div>
