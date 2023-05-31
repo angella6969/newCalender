@@ -43,15 +43,6 @@ class EventController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    // public function create(Event $event)
-    // {
-    //     $a = User::all();
-    //     return view('event-form', [
-    //         'data' => $event,
-    //         'users' => $a,
-    //         'action' => route('events.store')
-    //     ]);
-    // }
     public function create1(Event $event)
     {
         $a = User::get();
@@ -71,11 +62,6 @@ class EventController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    // public function store(EventRequest $request, Event $event)
-    // {
-    //     return $this->update($request, $event);
-    // }
-
 
     public function store1(Request $request)
     {
@@ -87,7 +73,7 @@ class EventController extends Controller
                 'start_date' => ['required'],
                 'end_date' => ['required'],
                 'category' => ['required'],
-                'selecttools' => ['required'],
+                'selecttools' => [],
             ]);
 
             $cekEvent = EventSPPD::where('start_date', '>=', $validatedData['start_date'])
@@ -107,21 +93,18 @@ class EventController extends Controller
 
 
                 $commonUsers = array_intersect($selectedUsers, $existingUsers);
-                
+
                 if (!empty($commonUsers)) {
 
                     $existingUserNames = User::whereIn('id', $existingUsers)->pluck('name')->toArray();
                     $message = 'User ' . implode(', ', $existingUserNames) . ' sudah dalam perjalanan';
                     return back()->with('fail', $message);
-
                 } else {
                     $event = EventSPPD::create($validatedData);
                     $eventId = $event->id;
 
                     $selectedUsers = $request->input('selecttools');
                     $userPerjalananData = [];
-
-
 
                     foreach ($selectedUsers as $userId) {
                         $userPerjalananData[] = [
@@ -167,43 +150,84 @@ class EventController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit1(Event $event,$id)
+    public function edit1(Event $event, $id)
     {
-        dd('a');
+        $event = EventSPPD::findOrFail($id);
+        $userPerjalanan = User::whereIn('id', function ($query) use ($id) {
+            $query->select('user_id')
+                ->from('user_perjalanans')
+                ->where('event_id', '=', $id);
+        })->get();
 
-        return view('content.edit',[
-            'event' => EventSPPD::all(),
+        // dd($userPerjalanan->pluck('id','name'));
 
+        return view('content.edit', [
+            'event' => $event,
+            'userPerjalanan' => $userPerjalanan,
+            'users' => user::all()
         ]);
     }
-    // public function edit(Event $event)
-    // {
-    //     dd(' ini adalah edit');
-    //     return view('event-form', [
-    //         'data' => $event,
-    //         'action' => route('events.update', $event->id)
-    //     ]);
-    // }
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(EventRequest $request, Event $event)
+    public function update(Request $request, $id)
     {
-        if ($request->has('delete')) {
-            return $this->destroy($event);
+        // dd('ini update');
+        try {
+            $validatedData = $request->validate([
+                'title' => 'required',
+                'asal' => 'required',
+                'tujuan' => 'required',
+                'start_date' => 'required',
+                'end_date' => 'required',
+                'category' => 'required',
+                'selecttools' => 'required',
+            ]);
+
+            $event = EventSPPD::findOrFail($id);
+
+            $event->title = $validatedData['title'];
+            $event->asal = $validatedData['asal'];
+            $event->tujuan = $validatedData['tujuan'];
+            $event->start_date = $validatedData['start_date'];
+            $event->end_date = $validatedData['end_date'];
+            $event->category = $validatedData['category'];
+
+            $event->save();
+
+            $selectedUsers = $validatedData['selecttools'];
+
+            $existingUserIds = userPerjalanan::where('event_id', $id)->pluck('user_id')->toArray();
+
+            $commonUsers = array_intersect($selectedUsers, $existingUserIds);
+
+            if (!empty($commonUsers)) {
+                $existingUserNames = User::whereIn('id', $commonUsers)->pluck('name')->toArray();
+                $message = 'User ' . implode(', ', $existingUserNames) . ' sudah dalam perjalanan';
+                return back()->with('fail', $message);
+            } else {
+                userPerjalanan::where('event_id', $id)->delete();
+
+                $userPerjalananData = [];
+
+                foreach ($selectedUsers as $userId) {
+                    $userPerjalananData[] = [
+                        'event_id' => $id,
+                        'user_id' => $userId,
+                        // 'created_at' => now(),
+                        // 'updated_at' => now(),
+                    ];
+                }
+
+                userPerjalanan::insert($userPerjalananData);
+
+                return redirect('/events')->with('success', 'Data berhasil diperbarui');
+            }
+        } catch (\Throwable $th) {
+            return back()->with('fail', 'Ada yang salah');
         }
-        $event->start_date = $request->start_date;
-        $event->end_date = $request->end_date;
-        $event->title = $request->title;
-        $event->category = $request->category;
-
-        $event->save();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Save data successfully'
-        ]);
     }
 
     /**

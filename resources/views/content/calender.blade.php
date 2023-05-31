@@ -8,10 +8,6 @@
         </div>
     </div>
 
-    {{-- <div id="modal-action" class="modal" tabindex="-1"></div> --}}
-
-
-
 
     <!-- Elemen modal -->
     <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
@@ -77,8 +73,8 @@
                     </table>
                 </div>
                 <div class="d-flex justify-content-center mb-3">
-                    <button type="button" class="btn btn-danger" id="deleteEvent">Delete</button>
-                    {{-- <a class="btn btn-primary" href="/edit/{{$id}}" role="button">Edit</a> --}}
+                    <button type="button" class="btn btn-danger" style="margin: 10px;" id="deleteEvent">Delete</button>
+                    <button type="button" class="btn btn-success" style="margin: 10px;" id="editEvent">EDIT</button>
                 </div>
             </div>
         </div>
@@ -192,6 +188,11 @@
                                 console.log('Gagal menghapus event');
                             }
                         });
+                    });
+
+                    document.getElementById('editEvent').addEventListener('click', function() {
+                        // Mengirim permintaan delete ke server menggunakan AJAX
+                        window.location.href = '/edit/' + eventId;
                     });
                 },
             });

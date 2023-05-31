@@ -33,6 +33,7 @@ Route::post('/create/{date}', [EventController::class, 'store1'])->name('events.
 
 
 Route::get('/edit/{id}', [EventController::class, 'edit1']);
+Route::post('/edit/{id}', [EventController::class, 'update']);
 
 // Route::get('perjalanan/{id}/edit', [EventController::class, 'edit']);
 
