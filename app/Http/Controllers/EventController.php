@@ -9,6 +9,7 @@ use App\Models\User;
 use App\Models\userPerjalanan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Stmt\TryCatch;
 
 class EventController extends Controller
@@ -74,53 +75,62 @@ class EventController extends Controller
                 'start_date' => ['required'],
                 'end_date' => ['required'],
                 'category' => ['required'],
-                'selecttools' => [],
+                'selecttools' => ['required'],
             ]);
 
             $cekEvent = EventSPPD::where('start_date', '>=', $validatedData['start_date'])
-                ->where('end_date', '<=', $validatedData['end_date'])
+                ->where('end_date', '<', date('Y-m-d', strtotime($validatedData['end_date'] . '+1 day')))
                 ->pluck('id');
 
-            if ($cekEvent != null) {
+                if ($cekEvent != null) {
 
                 $selectedUsers = $validatedData['selecttools'];
 
-                $cekUser = userPerjalanan::whereHas('event', function ($query) use ($validatedData) {
-                    $query->where('start_date', '>=', $validatedData['start_date'])
-                        ->where('end_date', '<=', $validatedData['end_date']);
-                })->pluck('user_id');
+                try {
+                    $cekUser = userPerjalanan::whereHas('event', function ($query) use ($validatedData) {
+                        $query->where('start_date', '>=', $validatedData['start_date'])
+                            ->where('end_date', '<', date('Y-m-d', strtotime($validatedData['end_date'] . '+1 day')));
+                    })->pluck('user_id');
+
+                    // Lanjutkan dengan tindakan selanjutnya menggunakan nilai $cekUser yang diperoleh
+                } catch (\Exception $e) {
+                    // Tangkap dan tangani error yang terjadi
+                    dd($e->getMessage());
+                }
 
                 $existingUsers = $cekUser->toArray();
 
-
                 $commonUsers = array_intersect($selectedUsers, $existingUsers);
 
-                if (!empty($commonUsers)) {
+                if ($commonUsers != null) {
 
                     $existingUserNames = User::whereIn('id', $existingUsers)->pluck('name')->toArray();
                     $existingUserPerjalanan = userPerjalanan::whereIn('user_id', $commonUsers)->pluck('event_id');
-                    $existingUser = EventSPPD::whereIn('id', $existingUserPerjalanan)->pluck('title')->toArray();
+                    $existingUser = EventSPPD::whereIn('id', $existingUserPerjalanan)
+                        ->whereBetween('start_date', [$validatedData['start_date'], $validatedData['end_date']])
+                        ->pluck('title')->toArray();
 
                     $message = 'User ' . implode(', ', $existingUserNames) . ' sudah dalam perjalanan ' . implode(', ', $existingUser);
                     return back()->withInput()->with('fail', $message);
                 } else {
-                    $event = EventSPPD::create($validatedData);
-                    $eventId = $event->id;
-
-                    $selectedUsers = $request->input('selecttools');
-                    $userPerjalananData = [];
-
-                    foreach ($selectedUsers as $userId) {
-                        $userPerjalananData[] = [
-                            'event_id' => $eventId,
-                            'user_id' => $userId,
-                            'created_at' => now(),
-                            'updated_at' => now(),
-                        ];
-                    }
                     if ($validatedData['start_date'] > $validatedData['end_date']) {
                         return back()->withInput()->with('loginError', 'Tanggal Kembali harus lebih besar dari Tanggal Berangkat');
                     } else {
+                        $event = EventSPPD::create($validatedData);
+                        $eventId = $event->id;
+
+                        $selectedUsers = $request->input('selecttools');
+                        $userPerjalananData = [];
+
+                        foreach ($selectedUsers as $userId) {
+                            $userPerjalananData[] = [
+                                'event_id' => $eventId,
+                                'user_id' => $userId,
+                                'created_at' => now(),
+                                'updated_at' => now(),
+                            ];
+                        }
+
                         userPerjalanan::insert($userPerjalananData);
                         return redirect('/events')->with('success', 'Data berhasil ditambahkan');
                     }
@@ -176,7 +186,6 @@ class EventController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // dd('ini update');
         try {
             $validatedData = $request->validate([
                 'title' => 'required',
@@ -185,9 +194,7 @@ class EventController extends Controller
                 'start_date' => 'required',
                 'end_date' => 'required',
                 'category' => 'required',
-                'selecttools' => 'required',
             ]);
-
             $event = EventSPPD::findOrFail($id);
 
             $event->title = $validatedData['title'];
@@ -199,21 +206,10 @@ class EventController extends Controller
 
             $event->save();
 
-            $selectedUsers = $validatedData['selecttools'];
-
-            $existingUserIds = userPerjalanan::where('event_id', $id)->pluck('user_id')->toArray();
-
-            $commonUsers = array_intersect($selectedUsers, $existingUserIds);
-
-            if (!empty($commonUsers)) {
-                $existingUserNames = User::whereIn('id', $commonUsers)->pluck('name')->toArray();
-                $existingUserPerjalanan = userPerjalanan::whereIn('user_id', $commonUsers)->pluck('event_id');
-                $existingUser = EventSPPD::whereIn('id', $existingUserPerjalanan)->pluck('title')->toArray();
-                // dd($existingUser);
-
-                $message = 'User ' . implode(', ', $existingUserNames) . ' sudah dalam perjalanan ' . implode(', ', $existingUser);
-                return back()->with('fail', $message);
-            } else {
+            if ($request->input('selecttools') == null) {
+                // dd('ini user tanpa edit');
+                $userEvent = userPerjalanan::where('event_id', $id)->pluck('user_id')->toArray();
+                $selectedUsers = $userEvent;
                 userPerjalanan::where('event_id', $id)->delete();
 
                 $userPerjalananData = [];
@@ -222,16 +218,51 @@ class EventController extends Controller
                     $userPerjalananData[] = [
                         'event_id' => $id,
                         'user_id' => $userId,
-                        // 'created_at' => now(),
-                        // 'updated_at' => now(),
                     ];
                 }
 
                 userPerjalanan::insert($userPerjalananData);
 
                 return redirect('/events')->with('success', 'Data berhasil diperbarui');
+            } else {
+                // dd('ini user edit');
+                DB::beginTransaction();
+
+                $selectedUsers = $request->input('selecttools');
+                $existingUserIds = userPerjalanan::where('event_id', $id)->pluck('user_id')->toArray();
+
+                $commonUsers = array_intersect($selectedUsers, $existingUserIds);
+
+                userPerjalanan::where('event_id', $id)->delete();
+
+                if (!empty($commonUsers)) {
+                    $existingUserNames = User::whereIn('id', $commonUsers)->pluck('name')->toArray();
+                    $existingUserPerjalanan = userPerjalanan::whereIn('user_id', $commonUsers)->pluck('event_id');
+                    $existingUser = EventSPPD::whereIn('id', $existingUserPerjalanan)
+                        ->whereBetween('start_date', [$validatedData['start_date'], $validatedData['end_date']])
+                        ->pluck('title')->toArray();
+                    db::rollBack();
+                    $message = 'User ' . implode(', ', $existingUserNames) . ' sudah dalam perjalanan ' . implode(', ', $existingUser);
+                    return back()->with('fail', $message);
+                } else {
+                    userPerjalanan::where('event_id', $id)->delete();
+
+                    $userPerjalananData = [];
+
+                    foreach ($selectedUsers as $userId) {
+                        $userPerjalananData[] = [
+                            'event_id' => $id,
+                            'user_id' => $userId,
+                        ];
+                    }
+
+                    userPerjalanan::insert($userPerjalananData);
+                    db::commit();
+                    return redirect('/events')->with('success', 'Data berhasil diperbarui');
+                }
             }
         } catch (\Throwable $th) {
+            db::rollBack();
             return back()->with('fail', 'Ada yang salah');
         }
     }
