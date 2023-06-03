@@ -46,6 +46,7 @@ class EventController extends Controller
     public function create1(Event $event)
     {
         $a = User::get();
+        // dd($a);
         $options = $a->map(function ($user) {
             return [
                 'id' => $user->id,
@@ -97,8 +98,11 @@ class EventController extends Controller
                 if (!empty($commonUsers)) {
 
                     $existingUserNames = User::whereIn('id', $existingUsers)->pluck('name')->toArray();
-                    $message = 'User ' . implode(', ', $existingUserNames) . ' sudah dalam perjalanan';
-                    return back()->with('fail', $message);
+                    $existingUserPerjalanan = userPerjalanan::whereIn('user_id', $commonUsers)->pluck('event_id');
+                    $existingUser = EventSPPD::whereIn('id', $existingUserPerjalanan)->pluck('title')->toArray();
+
+                    $message = 'User ' . implode(', ', $existingUserNames) . ' sudah dalam perjalanan ' . implode(', ', $existingUser);
+                    return back()->withInput()->with('fail', $message);
                 } else {
                     $event = EventSPPD::create($validatedData);
                     $eventId = $event->id;
@@ -114,10 +118,8 @@ class EventController extends Controller
                             'updated_at' => now(),
                         ];
                     }
-
-
                     if ($validatedData['start_date'] > $validatedData['end_date']) {
-                        return back()->with('loginError', 'Tanggal Kembali harus lebih besar dari Tanggal Berangkat');
+                        return back()->withInput()->with('loginError', 'Tanggal Kembali harus lebih besar dari Tanggal Berangkat');
                     } else {
                         userPerjalanan::insert($userPerjalananData);
                         return redirect('/events')->with('success', 'Data berhasil ditambahkan');
@@ -125,7 +127,7 @@ class EventController extends Controller
                 }
             }
         } catch (\Throwable $th) {
-            return back()->with('fail', 'Ada yang salah');
+            return back()->withInput()->with('fail', 'Ada yang salah');
         }
     }
 
@@ -205,7 +207,11 @@ class EventController extends Controller
 
             if (!empty($commonUsers)) {
                 $existingUserNames = User::whereIn('id', $commonUsers)->pluck('name')->toArray();
-                $message = 'User ' . implode(', ', $existingUserNames) . ' sudah dalam perjalanan';
+                $existingUserPerjalanan = userPerjalanan::whereIn('user_id', $commonUsers)->pluck('event_id');
+                $existingUser = EventSPPD::whereIn('id', $existingUserPerjalanan)->pluck('title')->toArray();
+                // dd($existingUser);
+
+                $message = 'User ' . implode(', ', $existingUserNames) . ' sudah dalam perjalanan ' . implode(', ', $existingUser);
                 return back()->with('fail', $message);
             } else {
                 userPerjalanan::where('event_id', $id)->delete();
