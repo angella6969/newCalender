@@ -82,7 +82,7 @@ class EventController extends Controller
                 ->where('end_date', '<', date('Y-m-d', strtotime($validatedData['end_date'] . '+1 day')))
                 ->pluck('id');
 
-                if ($cekEvent != null) {
+            if ($cekEvent != null) {
 
                 $selectedUsers = $validatedData['selecttools'];
 
@@ -228,12 +228,18 @@ class EventController extends Controller
                 // dd('ini user edit');
                 DB::beginTransaction();
 
+                $cekEvent = EventSPPD::whereBetween('start_date', [$validatedData['start_date'], $validatedData['end_date']])
+                    // ->where('end_date', '<', $validatedData['end_date'])
+                    ->pluck('id')
+                    ->toArray();
+
                 $selectedUsers = $request->input('selecttools');
                 $existingUserIds = userPerjalanan::where('event_id', $id)->pluck('user_id')->toArray();
 
                 $commonUsers = array_intersect($selectedUsers, $existingUserIds);
 
-                userPerjalanan::where('event_id', $id)->delete();
+                // dd($cekEvent);
+                // userPerjalanan::where('event_id', $id)->delete();
 
                 if (!empty($commonUsers)) {
                     $existingUserNames = User::whereIn('id', $commonUsers)->pluck('name')->toArray();
