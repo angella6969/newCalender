@@ -1,101 +1,107 @@
 @extends('layout.main')
 @section('container')
-    <div class="row">
-        <div class="col-12 mt-3 mb-3">
-            <div class="col-sm-12">
-                <div id='calendar'></div>
-            </div>
+<div class="row">
+    <div class="col-12 mt-3 mb-3">
+        <div class="input-group col-8 mt-3 mb-3">
+            <input type="text" class="form-control" name="search" placeholder="Pencarian Berdasarkan Nama" >
+            <button class="btn btn-info" type="button">Pencarian</button>
+        </div>
+        <div class="col-sm-12">
+            <div id='calendar'></div>
         </div>
     </div>
+</div>
 
 
-    <!-- Elemen modal -->
-    <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="eventModalLabel">Detail Perjalanan</h5>
-                </div>
+<!-- Elemen modal -->
+<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventModalLabel">Detail Perjalanan</h5>
+            </div>
 
-                <style>
-                    .table {
-                        width: 100%;
-                        border-collapse: collapse;
-                    }
+            <style>
+                .table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
 
-                    .table td {
-                        padding: 10px;
-                        border: 1px solid #ddd;
-                        word-wrap: break-word;
-                        /* Atau overflow-wrap: break-word; */
-                    }
-                </style>
-                <div class="modal-body">
-                    <table class="table-responsive-sm">
-                        <table class="table">
-                            <tr>
-                                <td>Keperluan</td>
-                                <td><span id="eventName"></span></td>
-                            </tr>
-                            {{-- <tr>
-                                <td>Kategori</td>
-                                <td><span id="eventCategory"></span></td>
-                            </tr> --}}
-                            <tr>
-                                <td>Berangkat</td>
-                                <td><span id="eventStarDate"></span></td>
-                            </tr>
-                            <tr>
-                                <td>Kembali</td>
-                                <td><span id="eventEndDate"></span></td>
-                            </tr>
-                            <tr>
-                                <td>Berangkat dari</td>
-                                <td><span id="eventAsal"></span></td>
-                            </tr>
-                            <tr>
-                                <td>Tujuan </td>
-                                <td><span id="eventTujuan"></span></td>
-                            </tr>
-                        </table>
-                    </table>
-
+                .table td {
+                    padding: 10px;
+                    border: 1px solid #ddd;
+                    word-wrap: break-word;
+                    /* Atau overflow-wrap: break-word; */
+                }
+            </style>
+            <div class="modal-body">
+                <table class="table-responsive-sm">
                     <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Personil Name</th>
-                                <!-- Tambahkan kolom-kolom lainnya sesuai kebutuhan -->
-                            </tr>
-                        </thead>
-                        <tbody id="personilTableBody">
-                            <!-- Data personil akan ditampilkan di sini -->
-                        </tbody>
+                        <tr>
+                            <td>Keperluan</td>
+                            <td><span id="eventName"></span></td>
+                        </tr>
+                        {{-- <tr>
+                            <td>Kategori</td>
+                            <td><span id="eventCategory"></span></td>
+                        </tr> --}}
+                        <tr>
+                            <td>Berangkat</td>
+                            <td><span id="eventStarDate"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Kembali</td>
+                            <td><span id="eventEndDate"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Berangkat dari</td>
+                            <td><span id="eventAsal"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Tujuan </td>
+                            <td><span id="eventTujuan"></span></td>
+                        </tr>
                     </table>
-                </div>
-                <div class="d-flex justify-content-center mb-3">
-                    <button type="button" class="btn btn-danger" style="margin: 10px;" id="deleteEvent">Delete</button>
-                    <button type="button" class="btn btn-success" style="margin: 10px;" id="editEvent">EDIT</button>
-                </div>
+                </table>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Personil Name</th>
+                            <!-- Tambahkan kolom-kolom lainnya sesuai kebutuhan -->
+                        </tr>
+                    </thead>
+                    <tbody id="personilTableBody">
+                        <!-- Data personil akan ditampilkan di sini -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="d-flex justify-content-center mb-3">
+                <button type="button" class="btn btn-danger" style="margin: 10px;" id="deleteEvent">Delete</button>
+                <button type="button" class="btn btn-success" style="margin: 10px;" id="editEvent">EDIT</button>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        @if (Session::has('success'))
+<script>
+    @if (Session::has('success'))
             iziToast.success({
                 title: 'success',
                 message: '{{ Session::get('success') }}',
                 position: 'topRight',
             });
         @endif
-    </script>
-    <script>
-        // const modal = $('#modal-action')
+</script>
+<script>
+    // const modal = $('#modal-action')
         const csrfToken = $('meta[name=csrf_token]').attr('content')
 
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
+                height: 'auto',
                 initialView: 'dayGridMonth',
                 themeSystem: 'bootstrap5',
                 events: `{{ route('events.list') }}`,
@@ -198,5 +204,5 @@
             });
             calendar.render();
         });
-    </script>
+</script>
 @endsection
