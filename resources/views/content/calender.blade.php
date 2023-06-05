@@ -100,6 +100,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
+                height: "auto",
                 initialView: 'dayGridMonth',
                 themeSystem: 'bootstrap5',
                 events: `{{ route('events.list') }}`,

@@ -176,14 +176,6 @@ class EventController extends Controller
 
         ]);
     }
-    // public function edit(Event $event)
-    // {
-    //     dd(' ini adalah edit');
-    //     return view('event-form', [
-    //         'data' => $event,
-    //         'action' => route('events.update', $event->id)
-    //     ]);
-    // }
 
     /**
      * Update the specified resource in storage.
