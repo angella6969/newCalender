@@ -71,7 +71,7 @@
     </div>
     {{-- </div> --}}
     <script>
-        @if (Session::has('loginError'))
+        @if (Session::has('createError'))
             iziToast.warning({
                 title: 'Error',
                 message: '{{ Session::get('loginError') }}',
