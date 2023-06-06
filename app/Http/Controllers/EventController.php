@@ -19,7 +19,11 @@ class EventController extends Controller
      */
     public function index()
     {
-        return view('content.calender');
+        return view('content.calender', [
+            'event' => EventSPPD::orderBy('start_date', 'asc')
+                ->paginate(10),
+            'date_now' =>  Carbon::now()
+        ]);
     }
 
     public function listEvent(Request $request)
@@ -44,7 +48,7 @@ class EventController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-   
+
     public function create1(Event $event)
     {
         $a = User::get();

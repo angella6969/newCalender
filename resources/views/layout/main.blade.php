@@ -14,7 +14,7 @@
 <body>
     @include('layout.script')
     {{-- @include('layout.sidebar') --}}
-    {{-- @include('layout.navbar') --}}
+    @include('layout.navbar')
 
     <div class="container">
         @yield('container')
