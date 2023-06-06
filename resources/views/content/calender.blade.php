@@ -26,7 +26,7 @@
                         </thead>
                         <tbody>
                             @foreach ($event as $item)
-                                <tr class="{{ $item->end_date < $date_now ? 'bg-success' : '' }}">
+                                <tr class="{{ $item->end_date < $date_now ? 'bg-danger' : '' }}">
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->title }}</td>
                                     <td>{{ $item->start_date }}</td>
