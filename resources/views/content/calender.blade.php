@@ -20,7 +20,7 @@
                                 <th scope="col">Kembali</th>
                                 {{-- <th scope="col">Kode Inventaris</th> --}}
                                 {{-- @can('SuperAdmin')
-                                    <th scope="col">Action</th>
+                                    <th scope="col">Action</th> 
                                 @endcan --}}
                             </tr>
                         </thead>
