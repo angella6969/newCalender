@@ -9,7 +9,16 @@
         </div>
         <div class="col-md-4 mt-3 mb-3">
             <div class="card h-100">
-                <Label class="d-flex justify-content-center">Daftar Event SPPD</Label>
+                <Label class="d-flex justify-content-center mt-3">Daftar Event SPPD</Label>
+                <form action="/events">
+                    <div class="row">
+                        <div class="input-group mt-3">
+                            <input type="text" class="form-control" placeholder="Search By Item Name..." name="search"
+                                value="{{ request('search') }}">
+                            <button class="btn btn-primary" type="submit" id="basic-addon2">Search</button>
+                        </div>
+                    </div>
+                </form>
                 <div class="card-body">
                     <table class="table table-striped table-sm table-responsive">
                         <thead>
@@ -150,11 +159,18 @@
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
+                // headerToolbar: {
+                //     start: 'title', // will normally be on the left. if RTL, will be on the right
+                //     center: '',
+                //     end: 'today prev,next' // will normally be on the right. if RTL, will be on the left
+                // },
                 height: 'auto',
+                locale: 'id',
                 initialView: 'dayGridMonth',
                 themeSystem: 'bootstrap5',
                 events: `{{ route('events.list') }}`,
                 editable: false,
+
                 dateClick: function(info) {
 
                     window.location.href = '/create/' + info.dateStr;

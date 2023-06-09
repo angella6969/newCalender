@@ -21,7 +21,8 @@ class EventController extends Controller
     {
         return view('content.calender', [
             'event' => EventSPPD::orderBy('start_date', 'asc')
-                ->paginate(10),
+                ->Filter(request(['search']))
+                ->paginate(8),
             'date_now' =>  Carbon::now()
         ]);
     }
