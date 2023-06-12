@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Stmt\TryCatch;
 
+use function PHPUnit\Framework\isEmpty;
+
 class EventController extends Controller
 {
     /**
@@ -82,11 +84,13 @@ class EventController extends Controller
             'selecttools' => ['required'],
         ]);
         try {
-            $cekEvent = EventSPPD::where('start_date', '<=', $validatedData['end_date'])
-                ->where('end_date', '>=', $validatedData['start_date'])
-                ->pluck('id');
+            // $cekEvent = EventSPPD::where('start_date', '<=', $validatedData['end_date'])
+            //     ->where('end_date', '>=', $validatedData['start_date'])
+            //     ->pluck('id');
 
-            if ($cekEvent != null) {
+            // dd($cekEvent);
+            // if (!isEmpty($cekEvent)) {
+            // dd('ada event');
 
                 $selectedUsers = $validatedData['selecttools'];
 
@@ -132,7 +136,29 @@ class EventController extends Controller
                         return redirect('/events')->with('success', 'Data berhasil ditambahkan');
                     }
                 }
-            }
+            // } else {
+            //     dd("tdk ada event");
+            //     if ($validatedData['start_date'] > $validatedData['end_date']) {
+            //         return back()->withInput()->with('createError', 'Tanggal Kembali harus lebih besar dari Tanggal Berangkat');
+            //     } else {
+            //         $event = EventSPPD::create($validatedData);
+            //         $eventId = $event->id;
+
+            //         $selectedUsers = $request->input('selecttools');
+            //         $userPerjalananData = [];
+
+            //         foreach ($selectedUsers as $userId) {
+            //             $userPerjalananData[] = [
+            //                 'event_id' => $eventId,
+            //                 'user_id' => $userId,
+            //                 'created_at' => now(),
+            //                 'updated_at' => now(),
+            //             ];
+            //         }
+            //         userPerjalanan::insert($userPerjalananData);
+            //         return redirect('/events')->with('success', 'Data berhasil ditambahkan');
+            //     }
+            // }
         } catch (\Throwable $th) {
             return back()->withInput()->with('fail', 'Ada yang salah');
         }

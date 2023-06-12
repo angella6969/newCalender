@@ -41,19 +41,19 @@
                                     <td>{{ $item->start_date }}</td>
                                     <td>{{ $item->end_date }}</td>
                                     {{-- <td>{{$item->categoryCode }}</td> --}}
-                                    <td>
+                                    {{-- <td> --}}
 
-                                        <a href="#" class="badge bg-info"><span data-feather="eye"></span></a>
-                                        {{-- @can('SuperAdmin')
-                                            <form action="/categories/{{ $barang->id }}" class="d-inline" method="POST">
+                                        {{-- <a href="#" class="badge bg-info"><span data-feather="eye"></span></a> --}}
+                                        {{-- @can('SuperAdmin') --}}
+                                        {{-- <form action="/perjalanan/{{ $item->id }}" class="d-inline" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="badge bg-danger border-0"
-                                                    onclick="return confirm('Yakin Ingin Menghapus Data? {{ $barang->nama }}')"><i
+                                                    onclick="return confirm('Yakin Ingin Menghapus Data? {{ $item->title }}')"><i
                                                         data-feather="trash-2"></i></button>
-                                            </form>
-                                        @endcan --}}
-                                    </td>
+                                            </form> --}}
+                                        {{-- @endcan --}}
+                                    {{-- </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -139,6 +139,28 @@
                     <button type="button" class="btn btn-danger" style="margin: 10px;" id="deleteEvent">Delete</button>
                     <button type="button" class="btn btn-success" style="margin: 10px;" id="editEvent">EDIT</button>
                 </div>
+
+
+
+                <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
+                    aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="confirmDeleteModalLabel">Konfirmasi Hapus Event</h5>
+                            </div>
+                            <div class="modal-body">
+                                Apakah Anda yakin ingin menghapus event ini?
+                            </div>
+                            <div class="modal-footer d-flex justify-content-center mb-3">
+                                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Hapus</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
             </div>
         </div>
     </div>
@@ -159,11 +181,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             var calendarEl = document.getElementById('calendar');
             var calendar = new FullCalendar.Calendar(calendarEl, {
-                // headerToolbar: {
-                //     start: 'title', // will normally be on the left. if RTL, will be on the right
-                //     center: '',
-                //     end: 'today prev,next' // will normally be on the right. if RTL, will be on the left
-                // },
                 height: 'auto',
                 locale: 'id',
                 initialView: 'dayGridMonth',
@@ -185,13 +202,11 @@
                         url: '/perjalanan/' + eventId,
                         method: 'GET',
                         success: function(response) {
-                            var eventData = response
-                                .event; // Mendapatkan data event dari response
+                            var eventData = response.event;
                             var personilData = response.personil;
 
                             var personilTableBody = document.getElementById(
                                 'personilTableBody');
-                            // Bersihkan konten tabel sebelum mengisi data
                             personilTableBody.innerHTML = '';
 
                             personilData.forEach(function(personil) {
@@ -237,29 +252,48 @@
                         }
                     });
 
-                    // Menambahkan event listener untuk tombol delete
                     document.getElementById('deleteEvent').addEventListener('click', function() {
-                        // Mengirim permintaan delete ke server menggunakan AJAX
-                        $.ajax({
-                            url: '/perjalanan/' +
-                                eventId, // Ganti dengan URL endpoint delete yang sesuai
-                            method: 'DELETE',
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
-                                    'content')
-                            },
-                            success: function(response) {
-                                console.log('Event berhasil dihapus');
-                                // Lakukan tindakan lain setelah berhasil menghapus event
-                                // Contoh: Refresh halaman atau update tampilan
-                                location
-                                    .reload(); // Contoh: Me-refresh halaman setelah menghapus event
-                            },
-                            error: function() {
-                                console.log('Gagal menghapus event');
-                            }
-                        });
+                        // Menampilkan modal konfirmasi
+                        $('#confirmDeleteModal').modal('show');
                     });
+
+                    document.getElementById('confirmDeleteButton').addEventListener('click',
+                        function() {
+
+                            // Mengirim permintaan delete ke server menggunakan AJAX
+                            $.ajax({
+                                url: '/perjalanan/' + eventId,
+                                method: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                        'content')
+                                },
+                                success: function(response) {
+                                    if (response.success) {
+                                        console.log(response.message);
+
+                                        // Menampilkan notifikasi iziToast
+                                        iziToast.success({
+                                            title: 'Sukses',
+                                            message: response.message,
+                                            position: 'topRight'
+                                        });
+
+                                        // Lakukan tindakan lain setelah berhasil menghapus event
+                                        location.reload();
+                                    } else {
+                                        console.log('Gagal menghapus event');
+                                    }
+                                },
+                                error: function() {
+                                    console.log('Gagal menghapus event');
+                                }
+                            });
+
+                            // Menutup modal konfirmasi setelah tombol "Hapus" ditekan
+                            $('#confirmDeleteModal').modal('hide');
+                        });
+
 
                     document.getElementById('editEvent').addEventListener('click', function() {
                         // Mengirim permintaan delete ke server menggunakan AJAX

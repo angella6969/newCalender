@@ -18,10 +18,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+route::get('/access_denied', function () {
+    return view('access_denied');
+});
 
 
-Route::get('/login', [LoginController::class, 'index'])->middleware('guest');;
+Route::get('/login', [LoginController::class, 'index'])->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate']);
+
+Route::post('/logout', [LoginController::class, 'logout']);
 
 
 Route::middleware(['auth'])->group(function () {
