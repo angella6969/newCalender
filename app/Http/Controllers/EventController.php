@@ -24,7 +24,7 @@ class EventController extends Controller
     {
         $userId = Auth::id();
         $eventUser = userPerjalanan::where('user_id', $userId)->pluck('event_id');
-        $userEvent = EventSPPD::whereIn('id', $eventUser)->get();
+        $userEvent = EventSPPD::whereIn('id', $eventUser)->latest()->paginate(10);
 
 
         // dd($userEvent);

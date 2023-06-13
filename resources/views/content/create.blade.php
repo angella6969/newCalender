@@ -47,10 +47,10 @@
                     <select id="normalize" name="category" class="mb-3">
                         <!-- Loop melalui opsi dari database -->
                         <option value="" selected>category</option>
-                        <option value="success">Jaringan Komputer</option>
-                        <option value="info">OP Web Side</option>
-                        <option value="warning">Foto & Vidio</option>
+                        <option value="info">OP Web</option>
                         <option value="danger">Inventaris</option>
+                        <option value="warning">Foto & Video</option>
+                        <option value="success">Jaringan Komputer</option>
                     </select>
 
                     <select id="remove-button" name="selecttools[]" multiple class="mb-3">
@@ -83,7 +83,7 @@
     <script>
         @if (Session::has('createError'))
             iziToast.warning({
-                title: 'Error',
+                title: 'Peringatan',
                 message: '{{ Session::get('createError') }}',
                 position: 'topRight',
             });
@@ -92,7 +92,7 @@
     <script>
         @if (Session::has('fail'))
             iziToast.error({
-                title: 'Error',
+                title: 'Peringatan',
                 message: '{{ Session::get('fail') }}',
                 position: 'topRight',
             });

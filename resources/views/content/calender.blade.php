@@ -34,12 +34,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($event as $item)
-                                <tr class="{{ $item->end_date < $date_now ? 'bg-danger' : '' }}">
+                            @foreach ($userEvent as $item)
+                                <tr class="{{ $item->end_date < $date_now ? 'bg-secondary' : '' }}">
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->title }}</td>
                                     <td>{{ $item->start_date }}</td>
-                                    <td>{{ $item->end_date }}</td>
+                                    <td>{{ $item->end_date }}</td> 
                                     {{-- <td>{{$item->categoryCode }}</td> --}}
                                     {{-- <td> --}}
 
@@ -61,7 +61,7 @@
                 </div>
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
-                        {{ $event->links() }}
+                        {{ $userEvent->links() }}
                     </ul>
                 </nav>
 
@@ -119,6 +119,10 @@
                             <tr>
                                 <td>Tujuan </td>
                                 <td><span id="eventTujuan"></span></td>
+                            </tr>
+                            <tr>
+                                <td>Target Hasil </td>
+                                <td>contoh target</td>
                             </tr>
                         </table>
                     </table>
