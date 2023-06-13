@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -55,7 +57,21 @@ class LoginController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validatedData = $request->validate([
+            'name' => 'required|max:255',
+            'username' => ['required', 'min:3', 'max:200', 'unique:users'],
+            'email' => ['required', 'email:dns', 'unique:users'],
+            'password' => ['required', 'min:5', 'max:255']
+        ]);
+        $validatedData['password'] = Hash::make($validatedData['password']);
+        User::create($validatedData);
+        auth::logout();
+        return redirect('/login')->with('success', 'registration successfull! Please Contact the Admin to Activated your akun');
+    }
+
+    public function storeAdmin(Request $request)
+    {
+       
     }
 
     /**
@@ -63,7 +79,7 @@ class LoginController extends Controller
      */
     public function show(string $id)
     {
-        //
+        
     }
 
     /**
@@ -71,7 +87,7 @@ class LoginController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        
     }
 
     /**
@@ -79,7 +95,7 @@ class LoginController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        
     }
 
     /**
@@ -87,6 +103,6 @@ class LoginController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        
     }
 }

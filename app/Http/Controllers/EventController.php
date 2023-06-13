@@ -14,7 +14,7 @@ use PhpParser\Node\Stmt\TryCatch;
 
 use function PHPUnit\Framework\isEmpty;
 
-class EventController extends Controller
+class EventController extends Controller 
 {
     /**
      * Display a listing of the resource.

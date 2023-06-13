@@ -4,6 +4,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\EventSPPDController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\PerjalananController as ControllersPerjalananController;
+use App\Http\Controllers\UserController;
 use App\Models\PerjalananController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,15 +22,36 @@ use Illuminate\Support\Facades\Route;
 route::get('/access_denied', function () {
     return view('access_denied');
 });
-
-
-Route::get('/login', [LoginController::class, 'index'])->middleware('guest');
+Route::get('/', function () {
+    return redirect()->route('login');
+});
+Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate']);
 
 Route::post('/logout', [LoginController::class, 'logout']);
 
 
 Route::middleware(['auth'])->group(function () {
+
+
+    Route::resource('/users', UserController::class);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     Route::get('events/list', [EventController::class, 'listEvent'])->name('events.list');
     Route::resource('events', EventController::class);
 

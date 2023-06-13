@@ -136,7 +136,7 @@
                     </table>
                 </div>
                 <div class="d-flex justify-content-center mb-3">
-                    <button type="button" class="btn btn-danger" style="margin: 10px;" id="deleteEvent">Delete</button>
+                    <button type="button" class="btn btn-danger" style="margin: 10px;" id="deleteEvent">Delete</button> 
                     <button type="button" class="btn btn-success" style="margin: 10px;" id="editEvent">EDIT</button>
                 </div>
 
