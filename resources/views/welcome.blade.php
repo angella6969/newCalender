@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    @include('layout.link')
     <title>Document</title>
 </head>
 
@@ -28,7 +29,9 @@
             text-align: left;
         }
     </style>
-
+    <div class="d-flex justify-content-center">
+        <h1>Tabel Perjalan Dinas PPK PP</h1>
+    </div>
     <table>
         <thead>
             <tr>

@@ -309,10 +309,14 @@ class EventController extends Controller
         $users = User::pluck('name');
 
         // Mendapatkan daftar perjalanan pengguna dalam rentang tanggal yang ditentukan
-        $userPerjalanan = UserPerjalanan::whereHas('event', function ($query) use ($startOfMonth, $endOfMonth) {
-            $query->whereBetween('start_date', [$startOfMonth, $endOfMonth])
-                ->orWhereBetween('end_date', [$startOfMonth, $endOfMonth]);
-        })->with('event')->get();
+        $userPerjalanan = UserPerjalanan::with('event')
+            ->whereHas('event', function ($query) use ($startOfMonth, $endOfMonth) {
+                $query->where(function ($query) use ($startOfMonth, $endOfMonth) {
+                    $query->whereBetween('start_date', [$startOfMonth, $endOfMonth])
+                        ->orWhereBetween('end_date', [$startOfMonth, $endOfMonth]);
+                });
+            })
+            ->get();
         // dd($userPerjalanan);
         // Membuat array dari rentang tanggal
         $dates = [];
@@ -322,6 +326,38 @@ class EventController extends Controller
             $currentDate->addDay();
         }
 
-        return view('welcome', compact('dates', 'users', 'userPerjalanan'));
+        return view(
+            'welcome',
+            [
+                'dates' => $dates,
+                'users' => $users,
+                'userPerjalanan' => $userPerjalanan
+            ]
+        );
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
