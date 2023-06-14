@@ -298,4 +298,30 @@ class EventController extends Controller
             ]);
         }
     }
+
+    public function laporan(Request $request)
+    {
+        // Mendapatkan rentang tanggal dalam bulan tertentu
+        $startOfMonth = Carbon::parse($request->input('month'))->startOfMonth();
+        $endOfMonth = Carbon::parse($request->input('month'))->endOfMonth();
+
+        // Mendapatkan daftar pengguna
+        $users = User::pluck('name');
+
+        // Mendapatkan daftar perjalanan pengguna dalam rentang tanggal yang ditentukan
+        $userPerjalanan = UserPerjalanan::whereHas('event', function ($query) use ($startOfMonth, $endOfMonth) {
+            $query->whereBetween('start_date', [$startOfMonth, $endOfMonth])
+                ->orWhereBetween('end_date', [$startOfMonth, $endOfMonth]);
+        })->with('event')->get();
+        // dd($userPerjalanan);
+        // Membuat array dari rentang tanggal
+        $dates = [];
+        $currentDate = $startOfMonth->copy();
+        while ($currentDate <= $endOfMonth) {
+            $dates[] = $currentDate->copy();
+            $currentDate->addDay();
+        }
+
+        return view('welcome', compact('dates', 'users', 'userPerjalanan'));
+    }
 }

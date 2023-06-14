@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('nip_nrp')->unique()->nullable();
+            $table->string('pangkat')->nullable();
+            $table->string('jabatan')->nullable();
+            $table->string('golongan')->nullable();
             $table->string('password');
             $table->timestamps();
         }); 

@@ -25,6 +25,8 @@ route::get('/access_denied', function () {
 Route::get('/', function () {
     return redirect()->route('login');
 });
+
+
 Route::get('/login', [LoginController::class, 'index'])->name('login')->middleware('guest');
 Route::post('/login', [LoginController::class, 'authenticate']);
 
@@ -63,9 +65,7 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('perjalanan/{id}', [EventController::class, 'destroy']);
 });
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
+Route::get('/s', [EventController::class, 'laporan']);
 
 // Route::get('events/list', [EventController::class, 'listEvent'])->name('events.list');
 // Route::resource('events', EventController::class);
