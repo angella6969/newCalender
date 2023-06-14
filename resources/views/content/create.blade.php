@@ -14,20 +14,35 @@
             <div class="row">
                 <div class="col-md-12 col-sm-6 mb-3">
                     <label for="">Keperluan</label>
-                    <input type="text" class="form-control -left" id="title" name="title" placeholder="Judul"
-                        value="{{ old('title') }}" required>
+                    <input type="text" class="form-control -left @error('title') is-invalid @enderror " id="title"
+                        name="title" placeholder="Judul" value="{{ old('title') }}" required>
+                    @error('title')
+                        <div class="invalit-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-6 col-sm-6 mb-3">
                     <label for="">Perjalanan Dari</label>
-                    <input type="text" class="form-control -left" id="asal" name="asal"
-                        placeholder="Perjalanan Dari" value="{{ old('asal') }}" required>
+                    <input type="text" class="form-control -left @error('asal') is-invalid @enderror " id="asal"
+                        name="asal" placeholder="Perjalanan Dari" value="{{ old('asal') }}" required>
+                    @error('asal')
+                        <div class="invalit-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
                 <div class="col-md-6 col-sm-6 mb-3">
                     <label for="">Perjalanan Ke</label>
-                    <input type="text" class="form-control" id="tujuan" name="tujuan" placeholder="Perjalanan Ke"
-                        value="{{ old('tujuan') }}" required>
+                    <input type="text" class="form-control @error('tujuan') is-invalid @enderror" id="tujuan"
+                        name="tujuan" placeholder="Perjalanan Ke" value="{{ old('tujuan') }}" required>
+                    @error('tujuan')
+                        <div class="invalit-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
                 </div>
                 <div class="col-md-6 col-sm-6 mb-3">
                     <label for="">Tanggal Berangkat</label>
@@ -43,12 +58,16 @@
                         onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'"
                         onmouseout="timeFunctionLong(this)">
                 </div>
+                <div class="col-md-12 col-sm-6 mb-3">
+                    <label for="output" class="form-label">Target Output</label>
+                    <textarea class="form-control" id="output" rows="1" name="output" required>{{ old('output') }}</textarea>
+                </div>
                 <div class="col-12">
                     <select id="normalize" name="category" class="mb-3">
                         <!-- Loop melalui opsi dari database -->
                         <option value="" selected>category</option>
                         <option value="info">OP Web</option>
-                        <option value="danger">Inventaris</option>
+                        <option value="btn-custom">Inventaris</option>
                         <option value="warning">Foto & Video</option>
                         <option value="success">Jaringan Komputer</option>
                     </select>
@@ -66,7 +85,7 @@
 
             <div class="form-group row">
                 <div class="d-flex justify-content-center">
-                    <a class="btn btn-secondary" href="/events" role="button"
+                    <a class="btn btn-custom" href="/events" role="button"
                         style="margin: 10px;   width: 150px;
                         height: 40px; ">Back</a>
                     <button class="btn btn-primary" style="margin: 10px;   width: 150px;
@@ -137,5 +156,22 @@
         $('#normalize').selectize({
             normalize: true
         });
+    </script>
+
+    <script>
+        const textarea = document.getElementById('output');
+        const maxRows = 3; // Batas maksimum jumlah baris
+
+        textarea.addEventListener('input', function() {
+            adjustTextareaHeight(textarea);
+        });
+
+        function adjustTextareaHeight(element) {
+            // Mengatur ketinggian textarea ke tinggi minimal
+            element.style.height = 'auto';
+
+            // Mengatur ketinggian textarea berdasarkan scrollHeight
+            element.style.height = Math.min(element.scrollHeight, maxRows * element.scrollHeight) + 'px';
+        }
     </script>
 @endsection

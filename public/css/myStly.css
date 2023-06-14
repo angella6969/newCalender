@@ -1,0 +1,21 @@
+.btn-custom {
+    color: #ffffff;
+    background-color: #bd1b77;
+    border-color: #e51df0;
+}
+
+.table-auto {
+    width: 100%;
+    overflow-x: auto;
+    table-layout: fixed;
+  }
+  
+/* Mengatur lebar dan tinggi modal */
+.modal-dialog {
+    width: auto; /* Ubah sesuai kebutuhan Anda */
+    max-width: 60%;
+  }
+  
+  /* .modal-content {
+    height: 300px; 
+  } */

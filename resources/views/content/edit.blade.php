@@ -39,6 +39,11 @@
                         onmouseover="this.type='date'" onclick="this.type='date'" onblur="this.type='text'"
                         onmouseout="timeFunctionLong(this)">
                 </div>
+
+                <div class="col-md-12 col-sm-6 mb-3">
+                    <label for="output" class="form-label">Target Output</label>
+                    <textarea class="form-control" id="output" rows="3" name="output" required>{{ $event->output }}</textarea>
+                </div>
                 <div class="col-12 mb-3">
                     <select id="normalize" name="category" class="mb-3">
                         @if ($event->category == 'success')
@@ -153,5 +158,21 @@
         $('#normalize').selectize({
             normalize: true
         });
+    </script>
+    <script>
+        const textarea = document.getElementById('output');
+        const maxRows = 3; // Batas maksimum jumlah baris
+
+        textarea.addEventListener('input', function() {
+            adjustTextareaHeight(textarea);
+        });
+
+        function adjustTextareaHeight(element) {
+            // Mengatur ketinggian textarea ke tinggi minimal
+            element.style.height = 'auto';
+
+            // Mengatur ketinggian textarea berdasarkan scrollHeight
+            element.style.height = Math.min(element.scrollHeight, maxRows * element.scrollHeight) + 'px';
+        }
     </script>
 @endsection

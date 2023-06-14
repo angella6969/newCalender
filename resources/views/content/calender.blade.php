@@ -39,20 +39,20 @@
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->title }}</td>
                                     <td>{{ $item->start_date }}</td>
-                                    <td>{{ $item->end_date }}</td> 
+                                    <td>{{ $item->end_date }}</td>
                                     {{-- <td>{{$item->categoryCode }}</td> --}}
                                     {{-- <td> --}}
 
-                                        {{-- <a href="#" class="badge bg-info"><span data-feather="eye"></span></a> --}}
-                                        {{-- @can('SuperAdmin') --}}
-                                        {{-- <form action="/perjalanan/{{ $item->id }}" class="d-inline" method="POST">
+                                    {{-- <a href="#" class="badge bg-info"><span data-feather="eye"></span></a> --}}
+                                    {{-- @can('SuperAdmin') --}}
+                                    {{-- <form action="/perjalanan/{{ $item->id }}" class="d-inline" method="POST">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="badge bg-danger border-0"
                                                     onclick="return confirm('Yakin Ingin Menghapus Data? {{ $item->title }}')"><i
                                                         data-feather="trash-2"></i></button>
                                             </form> --}}
-                                        {{-- @endcan --}}
+                                    {{-- @endcan --}}
                                     {{-- </td> --}}
                                 </tr>
                             @endforeach
@@ -95,15 +95,11 @@
                 </style>
                 <div class="modal-body">
                     <table class="table-responsive-sm">
-                        <table class="table">
+                        <table class="table table-auto ">
                             <tr>
                                 <td>Keperluan</td>
                                 <td><span id="eventName"></span></td>
                             </tr>
-                            {{-- <tr>
-                            <td>Kategori</td>
-                            <td><span id="eventCategory"></span></td>
-                        </tr> --}}
                             <tr>
                                 <td>Berangkat</td>
                                 <td><span id="eventStarDate"></span></td>
@@ -121,8 +117,8 @@
                                 <td><span id="eventTujuan"></span></td>
                             </tr>
                             <tr>
-                                <td>Target Hasil </td>
-                                <td>contoh target</td>
+                                <td>Target Output </td>
+                                <td><span id="eventOutput"></span></td>
                             </tr>
                         </table>
                     </table>
@@ -131,37 +127,21 @@
                         <thead>
                             <tr>
                                 <th>Personil Name</th>
-                                <!-- Tambahkan kolom-kolom lainnya sesuai kebutuhan -->
                             </tr>
                         </thead>
                         <tbody id="personilTableBody">
-                            <!-- Data personil akan ditampilkan di sini -->
+                            {{-- <tr><span ></span></tr> --}}
                         </tbody>
                     </table>
                 </div>
                 <div class="d-flex justify-content-center mb-3">
-                    <button type="button" class="btn btn-danger" style="margin: 10px;" id="deleteEvent">Delete</button> 
+                    <button type="button" class="btn btn-danger" style="margin: 10px;" id="deleteEvent">Delete</button>
                     <button type="button" class="btn btn-success" style="margin: 10px;" id="editEvent">EDIT</button>
                 </div>
 
-
-
-                <div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog"
-                    aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="confirmDeleteModalLabel">Konfirmasi Hapus Event</h5>
-                            </div>
-                            <div class="modal-body">
-                                Apakah Anda yakin ingin menghapus event ini?
-                            </div>
-                            <div class="modal-footer d-flex justify-content-center mb-3">
-                                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Hapus</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {{-- Modal --}}
+                <x-modal />
+                {{-- End Modal --}}
 
 
 
@@ -248,6 +228,9 @@
                             document.getElementById('eventTujuan').textContent = eventData
                                 .tujuan;
 
+                            document.getElementById('eventOutput').textContent = eventData
+                                .output;
+
                             // Menampilkan modal
                             $('#eventModal').modal('show');
                         },
@@ -297,7 +280,6 @@
                             // Menutup modal konfirmasi setelah tombol "Hapus" ditekan
                             $('#confirmDeleteModal').modal('hide');
                         });
-
 
                     document.getElementById('editEvent').addEventListener('click', function() {
                         // Mengirim permintaan delete ke server menggunakan AJAX

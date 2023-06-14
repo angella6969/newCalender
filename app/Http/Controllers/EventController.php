@@ -84,23 +84,17 @@ class EventController extends Controller
     public function store1(Request $request)
     {
         $validatedData = $request->validate([
-            'title' => 'required',
-            'asal' => ['required'],
-            'tujuan' => ['required'],
-            'start_date' => ['required'],
-            'end_date' => ['required'],
-            'category' => ['required'],
-            'selecttools' => ['required'],
+            'title' => 'required|max:255',
+            'asal' => 'required|max:255',
+            'tujuan' => 'required|max:255',
+            'start_date' => 'required',
+            'end_date' => 'required',
+            'category' => 'required',
+            'output' => 'required',
+            'selecttools' => 'required',
         ]);
+
         try {
-            // $cekEvent = EventSPPD::where('start_date', '<=', $validatedData['end_date'])
-            //     ->where('end_date', '>=', $validatedData['start_date'])
-            //     ->pluck('id');
-
-            // dd($cekEvent);
-            // if (!isEmpty($cekEvent)) {
-            // dd('ada event');
-
             $selectedUsers = $validatedData['selecttools'];
 
             $cekUser = userPerjalanan::whereHas('event', function ($query) use ($validatedData) {
@@ -145,29 +139,6 @@ class EventController extends Controller
                     return redirect('/events')->with('success', 'Data berhasil ditambahkan');
                 }
             }
-            // } else {
-            //     dd("tdk ada event");
-            //     if ($validatedData['start_date'] > $validatedData['end_date']) {
-            //         return back()->withInput()->with('createError', 'Tanggal Kembali harus lebih besar dari Tanggal Berangkat');
-            //     } else {
-            //         $event = EventSPPD::create($validatedData);
-            //         $eventId = $event->id;
-
-            //         $selectedUsers = $request->input('selecttools');
-            //         $userPerjalananData = [];
-
-            //         foreach ($selectedUsers as $userId) {
-            //             $userPerjalananData[] = [
-            //                 'event_id' => $eventId,
-            //                 'user_id' => $userId,
-            //                 'created_at' => now(),
-            //                 'updated_at' => now(),
-            //             ];
-            //         }
-            //         userPerjalanan::insert($userPerjalananData);
-            //         return redirect('/events')->with('success', 'Data berhasil ditambahkan');
-            //     }
-            // }
         } catch (\Throwable $th) {
             return back()->withInput()->with('fail', 'Ada yang salah');
         }
@@ -218,11 +189,12 @@ class EventController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'title' => 'required',
-            'asal' => 'required',
-            'tujuan' => 'required',
+            'title' => 'required|max:255',
+            'asal' => 'required|max:255',
+            'tujuan' => 'required|max:255',
             'start_date' => 'required',
             'end_date' => 'required',
+            'output' => ['required'],
             'category' => 'required',
         ]);
         try {
@@ -267,7 +239,6 @@ class EventController extends Controller
                 $existingUserIds = userPerjalanan::where('event_id', $intersectValues)->pluck('user_id')->toArray();
 
                 $commonUsers = array_intersect($selectedUsers, $existingUserIds);
-
 
 
                 if (!empty($commonUsers)) {

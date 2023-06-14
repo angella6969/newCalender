@@ -50,3 +50,5 @@
 {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@3.10.2/main.min.css" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fullcalendar/bootstrap@3.10.2/main.min.css" /> --}}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/izitoast/1.4.0/css/iziToast.min.css" integrity="sha512-O03ntXoVqaGUTAeAmvQ2YSzkCvclZEcPQu1eqloPaHfJ5RuNGiS4l+3duaidD801P50J28EHyonCV06CUlTSag==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<link rel="stylesheet" href="{{ asset('/css/myStly.css') }}">
