@@ -1,7 +1,7 @@
 @extends('layout.main')
 @section('container')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">Tambah Perjalanan</h1>
+        <h1 class="h2">Rencana Perjalanan Perjalanan</h1>
     </div>
     <div class="x_content" style="display: block;">
         <br>
@@ -66,10 +66,10 @@
                     <select id="normalize" name="category" class="mb-3">
                         <!-- Loop melalui opsi dari database -->
                         <option value="" selected>category</option>
-                        <option value="info">OP Web</option>
-                        <option value="btn-custom">Inventaris</option>
-                        <option value="warning">Foto & Video</option>
-                        <option value="success">Jaringan Komputer</option>
+                        <option value="WEB">OP Web</option>
+                        <option value="DAT">Inventaris</option>
+                        <option value="PVS">Foto & Video</option>
+                        <option value="INT">Jaringan Komputer</option>
                     </select>
 
                     <select id="remove-button" name="selecttools[]" multiple class="mb-3">
@@ -85,7 +85,7 @@
 
             <div class="form-group row">
                 <div class="d-flex justify-content-center">
-                    <a class="btn btn-custom" href="/events" role="button"
+                    <a class="btn btn-info" href="/events" role="button"
                         style="margin: 10px;   width: 150px;
                         height: 40px; ">Back</a>
                     <button class="btn btn-primary" style="margin: 10px;   width: 150px;

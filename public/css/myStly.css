@@ -8,14 +8,32 @@
     width: 100%;
     overflow-x: auto;
     table-layout: fixed;
-  }
-  
+}
+
 /* Mengatur lebar dan tinggi modal */
 .modal-dialog {
     width: auto; /* Ubah sesuai kebutuhan Anda */
     max-width: 60%;
-  }
-  
-  /* .modal-content {
-    height: 300px; 
-  } */
+}
+
+.WEB {
+    background-color: #000285; /* Warna latar belakang event */
+    color: #ffffff; /* Warna teks pada event */
+    outline: 2px solid rgb(255, 255, 255);
+}
+
+.DAT {
+    background-color: #009ba0; /* Warna latar belakang event */
+    color: #ffffff; /* Warna teks pada event */
+    outline: 2px solid rgb(255, 255, 255);
+}
+.PVS {
+    background-color: #009600; /* Warna latar belakang event */
+    color: #ffffff; /* Warna teks pada event */
+    outline: 2px solid rgb(255, 255, 255);
+}
+.INT {
+    background-color: #9b0093; /* Warna latar belakang event */
+    color: #ffffff; /* Warna teks pada event */
+    outline: 2px solid rgb(255, 255, 255);
+}

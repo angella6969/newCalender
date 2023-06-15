@@ -13,7 +13,7 @@
                 <form action="/events">
                     <div class="row">
                         <div class="input-group mt-3">
-                            <input type="text" class="form-control" placeholder="Search By Item Name..." name="search"
+                            <input type="text" class="form-control" placeholder="Search By Event Name..." name="search"
                                 value="{{ request('search') }}">
                             <button class="btn btn-primary" type="submit" id="basic-addon2">Search</button>
                         </div>
@@ -34,7 +34,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($userEvent as $item)
+                            @foreach ($event as $item)
                                 <tr class="{{ $item->end_date < $date_now ? 'bg-secondary' : '' }}">
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->title }}</td>
@@ -61,7 +61,7 @@
                 </div>
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
-                        {{ $userEvent->links() }}
+                        {{ $event->links() }}
                     </ul>
                 </nav>
 

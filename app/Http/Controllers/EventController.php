@@ -8,6 +8,7 @@ use App\Models\EventSPPD;
 use App\Models\User;
 use App\Models\userPerjalanan;
 use Carbon\Carbon;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -51,7 +52,9 @@ class EventController extends Controller
                 'start' => $item->start_date,
                 'end' => date('Y-m-d', strtotime($item->end_date . '+1 days')),
                 'category' => $item->category,
-                'className' => ['bg-' . $item->category]
+                // 'eventColor'=> '#378006',
+                // 'className' => ['bg-' . $item->category]
+                'className' => [$item->category]
             ]);
 
         return response()->json($events);
@@ -326,38 +329,17 @@ class EventController extends Controller
             $currentDate->addDay();
         }
 
+        $dateString = '2023-06-15';
+        $year = new DateTime($dateString);
+
         return view(
             'welcome',
             [
                 'dates' => $dates,
                 'users' => $users,
+                'year' => $year,
                 'userPerjalanan' => $userPerjalanan
             ]
         );
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
