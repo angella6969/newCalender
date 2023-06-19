@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EventRequest;
 use App\Models\Event;
 use App\Models\EventSPPD;
+use App\Models\imageSlideShow;
 use App\Models\User;
 use App\Models\userPerjalanan;
 use Carbon\Carbon;
@@ -95,7 +96,16 @@ class EventController extends Controller
             'category' => 'required',
             'output' => 'required',
             'selecttools' => 'required',
+            'images' => ['image', 'file', 'max:1024']
+
         ]);
+        dd($validatedData['images']);
+
+        if ($request->file('images')) {
+            dd($validatedData['images']);
+            $validatedData['image'] = $request->file('image')->store('image-store');
+        }
+
 
         try {
             $selectedUsers = $validatedData['selecttools'];
@@ -139,6 +149,24 @@ class EventController extends Controller
                         ];
                     }
                     userPerjalanan::insert($userPerjalananData);
+
+                    // if ($request->file('image')) {
+                    //     $images = $request->file('image');
+                    //     foreach ($images as $image) {
+                    //         // Buat nama unik untuk setiap file gambar
+                    //         $filename = time() . '_' . $image->getClientOriginalName();
+
+                    //         // Simpan gambar ke direktori penyimpanan
+                    //         $path = $image->storeAs('public/images', $filename);
+
+                    //         // Simpan informasi gambar ke dalam database
+                    //         $imageData = new imageSlideShow();
+                    //         $imageData->event_id = $event->id; // Menghubungkan gambar dengan event
+                    //         $imageData->filename = $filename;
+                    //         $imageData->filepath = $path;
+                    //         $imageData->save();
+                    //     }
+                    // }
                     return redirect('/events')->with('success', 'Data berhasil ditambahkan');
                 }
             }

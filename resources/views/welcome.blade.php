@@ -32,7 +32,7 @@
         }
     </style>
     <div class="d-flex justify-content-center " style="text-align: center;">
-        <h1>MONITORING ABSENSI PERJALANAN DINAS PPK PERENCANAAN DAN PROGRAM <br> TAHUN ANGGARAN {{ $year->format('Y') }}
+        <h1>MONITORING ABSENSI PERJALANAN DINAS <br> PPK PERENCANAAN DAN PROGRAM <br> TAHUN ANGGARAN {{ $year->format('Y') }}
         </h1>
     </div>
     <div class="d-flex justify-content-end">

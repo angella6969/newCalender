@@ -37,3 +37,33 @@
     color: #ffffff; /* Warna teks pada event */
     outline: 2px solid rgb(255, 255, 255);
 }
+
+.image-previews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+}
+
+.image-preview {
+    position: relative;
+    width: 300px;
+    height: auto;
+}
+
+.image-preview img {
+    width: auto;
+    height: auto;
+    object-fit: cover;
+
+}
+.close-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    color:rgba(255, 252, 252, 0.8);
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 10%;
+    padding: 5px;
+    cursor: pointer;
+}

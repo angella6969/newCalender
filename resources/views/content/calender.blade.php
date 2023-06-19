@@ -122,6 +122,11 @@
                             </tr>
                         </table>
                     </table>
+                    <div class="slideshow">
+                        <img src="gambar1.jpg" alt="Slide 1">
+                        <img src="gambar2.jpg" alt="Slide 2">
+                        <img src="gambar3.jpg" alt="Slide 3">
+                    </div>
 
                     <table class="table">
                         <thead>
@@ -148,7 +153,7 @@
             </div>
         </div>
     </div>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         @if (Session::has('success'))
             iziToast.success({

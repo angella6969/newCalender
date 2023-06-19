@@ -14,13 +14,18 @@ class EventSPPD extends Model
     {
         return $this->belongsTo(userPerjalanan::class);
     }
-
+    public function imageSlideShows()
+    {
+        return $this->hasMany(imageSlideShow::class, 'event_id');
+    }
     public function scopeFilter($query, array $Filters)
     {
         $query->when($Filters['search'] ?? false, function ($query, $search) {
             return  $query->where('title', 'ilike', '%' . strtolower($search) . '%');
         });
 
+
+        
         // $query->when($Filters['status'] ?? false, function ($query, $status) {
         //     return  $query->where('status', 'ilike', '%' . $status . '%');
         // });
