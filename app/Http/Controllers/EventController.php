@@ -40,6 +40,27 @@ class EventController extends Controller
         ]);
     }
 
+    // public function listEvent(Request $request)
+    // {
+    //     $start = date('Y-m-d', strtotime($request->start));
+    //     $end = date('Y-m-d', strtotime($request->end));
+
+    //     $events = EventSPPD::where('start_date', '>=', $start)
+    //         ->where('end_date', '<=', $end)->get()
+    //         ->map(fn ($item) => [
+    //             'id' => $item->id,
+    //             'title' => $item->title,
+    //             'start' => $item->start_date,
+    //             'end' => date('Y-m-d', strtotime($item->end_date . '+1 days')),
+    //             'category' => $item->category,
+    //             // 'eventColor'=> '#378006',
+    //             // 'className' => ['bg-' . $item->category]
+    //             'className' => [$item->category]
+    //         ]);
+
+    //     return response()->json($events);
+    // }
+
     public function listEvent(Request $request)
     {
         $start = date('Y-m-d', strtotime($request->start));
@@ -47,19 +68,28 @@ class EventController extends Controller
 
         $events = EventSPPD::where('start_date', '>=', $start)
             ->where('end_date', '<=', $end)->get()
-            ->map(fn ($item) => [
-                'id' => $item->id,
-                'title' => $item->title,
-                'start' => $item->start_date,
-                'end' => date('Y-m-d', strtotime($item->end_date . '+1 days')),
-                'category' => $item->category,
-                // 'eventColor'=> '#378006',
-                // 'className' => ['bg-' . $item->category]
-                'className' => [$item->category]
-            ]);
+            ->map(function ($item) {
+                $event = [
+                    'id' => $item->id,
+                    'title' => $item->title,
+                    'start' => $item->start_date,
+                    'end' => date('Y-m-d', strtotime($item->end_date . '+1 days')),
+                    'category' => $item->category,
+                    'className' => [$item->category]
+                ];
+
+                // Ambil foto terkait dari tabel imageSlideShow
+                $photos = imageSlideShow::where('event_id', $item->id)->get(['filename', 'filepath']);
+
+                // Tambahkan foto-foto ke dalam data event
+                $event['photos'] = $photos;
+
+                return $event;
+            });
 
         return response()->json($events);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -96,15 +126,16 @@ class EventController extends Controller
             'category' => 'required',
             'output' => 'required',
             'selecttools' => 'required',
-            'images' => ['image', 'file', 'max:1024']
+            'images.*' => ['image', 'file', 'max:1024']
 
         ]);
-        dd($validatedData['images']);
+        // dd($validatedData['images']);
 
-        if ($request->file('images')) {
-            dd($validatedData['images']);
-            $validatedData['image'] = $request->file('image')->store('image-store');
-        }
+        // if ($request->file('images')) {
+        //     dd('a');
+        //     dd($validatedData['images']);
+        //     $validatedData['image'] = $request->file('image')->store('image-store');
+        // }
 
 
         try {
@@ -150,23 +181,23 @@ class EventController extends Controller
                     }
                     userPerjalanan::insert($userPerjalananData);
 
-                    // if ($request->file('image')) {
-                    //     $images = $request->file('image');
-                    //     foreach ($images as $image) {
-                    //         // Buat nama unik untuk setiap file gambar
-                    //         $filename = time() . '_' . $image->getClientOriginalName();
+                    if ($request->file('images')) {
+                        $images = $request->file('images');
+                        foreach ($images as $image) {
+                            // Buat nama unik untuk setiap file gambar
+                            $filename = time() . '_' . $image->getClientOriginalName();
 
-                    //         // Simpan gambar ke direktori penyimpanan
-                    //         $path = $image->storeAs('public/images', $filename);
+                            // Simpan gambar ke direktori penyimpanan
+                            $path = $image->storeAs('public/images', $filename);
 
-                    //         // Simpan informasi gambar ke dalam database
-                    //         $imageData = new imageSlideShow();
-                    //         $imageData->event_id = $event->id; // Menghubungkan gambar dengan event
-                    //         $imageData->filename = $filename;
-                    //         $imageData->filepath = $path;
-                    //         $imageData->save();
-                    //     }
-                    // }
+                            // Simpan informasi gambar ke dalam database
+                            $imageData = new imageSlideShow();
+                            $imageData->event_id = $event->id; // Menghubungkan gambar dengan event
+                            $imageData->filename = $filename;
+                            $imageData->filepath = $path;
+                            $imageData->save();
+                        }
+                    }
                     return redirect('/events')->with('success', 'Data berhasil ditambahkan');
                 }
             }

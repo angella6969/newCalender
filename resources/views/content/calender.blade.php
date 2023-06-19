@@ -122,11 +122,21 @@
                             </tr>
                         </table>
                     </table>
-                    <div class="slideshow">
-                        <img src="gambar1.jpg" alt="Slide 1">
-                        <img src="gambar2.jpg" alt="Slide 2">
-                        <img src="gambar3.jpg" alt="Slide 3">
-                    </div>
+                    {{-- <div class="slideshow"> --}}
+                        <img src="{{ asset('/storage/images/1687153763_Untitled.png') }}" alt="Slide" width="200"
+                            class="img-thumbnail ">
+                        <img src="{{ asset('/storage/images/1687153763_Untitled.png') }}" alt="Slide" width="200"
+                            class="img-thumbnail ">
+                        <img src="{{ asset('/storage/images/1687153763_Untitled.png') }}" alt="Slide" width="200"
+                            class="img-thumbnail ">
+                        <img src="{{ asset('/storage/images/1687153763_Untitled.png') }}" alt="Slide" width="200"
+                            class="img-thumbnail ">
+                        <img src="{{ asset('/storage/images/1687153763_Untitled.png') }}" alt="Slide" width="200"
+                            class="img-thumbnail ">
+
+                        <div id="eventPhotos" class="event-photos"></div>
+                        <!-- Tambahkan elemen lainnya sesuai kebutuhan -->
+                    {{-- </div> --}}
 
                     <table class="table">
                         <thead>
@@ -193,7 +203,8 @@
                         success: function(response) {
                             var eventData = response.event;
                             var personilData = response.personil;
-
+                            var eventPhotosContainer = document.getElementById(
+                                'eventPhotos');
                             var personilTableBody = document.getElementById(
                                 'personilTableBody');
                             personilTableBody.innerHTML = '';
@@ -213,6 +224,19 @@
 
                                 personilTableBody.appendChild(row);
                             });
+
+                            eventPhotosContainer.innerHTML = '';
+                            if (eventData.photos) {
+                                eventData.photos.forEach(function(photo) {
+                                    var imageElement = document.createElement(
+                                        'img');
+                                    imageElement.src = photo.filepath;
+                                    imageElement.alt = photo.filename;
+                                    imageElement.classList.add('event-photo');
+
+                                    eventPhotosContainer.appendChild(imageElement);
+                                });
+                            }
 
                             // Mengisi konten modal dengan data dari event
                             document.getElementById('eventName').textContent = eventData
@@ -235,6 +259,8 @@
 
                             document.getElementById('eventOutput').textContent = eventData
                                 .output;
+                            // document.getElementById('eventImages').textContent = eventData
+                            //     .images;
 
                             // Menampilkan modal
                             $('#eventModal').modal('show');
