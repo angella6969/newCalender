@@ -83,7 +83,7 @@
 
                 {{-- Field Foto --}}
                 <div class="col-md-12 col-sm-6 mb-3">
-                    <label for="image">Foto Dokumentasi</label>
+                    <label for="images">Foto Dokumentasi</label>
                     <div>
                         <div id="imagePreviews" class="image-previews"></div>
                         <input type="file" class="form-control @error('images') is-invalid @enderror" id="images"
@@ -160,7 +160,7 @@
             var previewContainer = document.getElementById('imagePreviews');
             previewContainer.innerHTML = ''; // Menghapus pratinjau gambar sebelumnya
 
-            var files = document.getElementById('image').files;
+            var files = document.getElementById('images').files;
             for (var i = 0; i < files.length; i++) {
                 var file = files[i];
                 var reader = new FileReader();
@@ -180,7 +180,7 @@
                                 previewItem); // Menghapus pratinjau gambar saat tombol close diklik
 
                             // Menghapus file yang sesuai dari daftar file yang dipilih
-                            var input = document.getElementById('image');
+                            var input = document.getElementById('images');
                             var files = Array.from(input.files);
                             var index = files.findIndex(function(file) {
                                 return file.name === file.name;

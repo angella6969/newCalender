@@ -13,7 +13,7 @@
 /* Mengatur lebar dan tinggi modal */
 .modal-dialog {
     width: auto; /* Ubah sesuai kebutuhan Anda */
-    max-width: 60%;
+    max-width: 50%;
 }
 
 .WEB {

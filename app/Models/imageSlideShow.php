@@ -10,8 +10,9 @@ class imageSlideShow extends Model
     use HasFactory;
     protected $guarded = ['id'];
     
-    public function photos()
+    public function event()
     {
-        return $this->belongsTo(EventSPPD::class);
+        return $this->belongsTo(EventSPPD::class, 'event_id');
     }
+    
 }

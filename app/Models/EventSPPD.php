@@ -14,10 +14,10 @@ class EventSPPD extends Model
     {
         return $this->belongsTo(userPerjalanan::class);
     }
-    public function imageSlideShows()
-    {
-        return $this->hasMany(imageSlideShow::class, 'event_id');
-    }
+    public function photos()
+{
+    return $this->hasMany(imageSlideShow::class, 'event_id');
+}
     public function scopeFilter($query, array $Filters)
     {
         $query->when($Filters['search'] ?? false, function ($query, $search) {

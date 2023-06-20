@@ -28,8 +28,8 @@ class EventController extends Controller
         $eventUser = userPerjalanan::where('user_id', $userId)->pluck('event_id');
         $userEvent = EventSPPD::whereIn('id', $eventUser)->latest()->paginate(10);
 
-
-        // dd($userEvent);
+        $photos = imageSlideShow::all();
+        // dd($photos);
 
         return view('content.calender', [
             'userEvent' =>  $userEvent,
@@ -67,7 +67,9 @@ class EventController extends Controller
         $end = date('Y-m-d', strtotime($request->end));
 
         $events = EventSPPD::where('start_date', '>=', $start)
-            ->where('end_date', '<=', $end)->get()
+            ->where('end_date', '<=', $end)
+            ->with('photos') // Memuat relasi 'photos'
+            ->get()
             ->map(function ($item) {
                 $event = [
                     'id' => $item->id,
@@ -79,7 +81,12 @@ class EventController extends Controller
                 ];
 
                 // Ambil foto terkait dari tabel imageSlideShow
-                $photos = imageSlideShow::where('event_id', $item->id)->get(['filename', 'filepath']);
+                $photos = $item->photos->map(function ($photo) {
+                    return [
+                        'filename' => $photo->filename,
+                        'filepath' => $photo->filepath
+                    ];
+                });
 
                 // Tambahkan foto-foto ke dalam data event
                 $event['photos'] = $photos;
@@ -89,6 +96,8 @@ class EventController extends Controller
 
         return response()->json($events);
     }
+
+
 
 
     /**
@@ -181,7 +190,7 @@ class EventController extends Controller
                     }
                     userPerjalanan::insert($userPerjalananData);
 
-                    if ($request->file('images')) {
+                    if ($request->hasFile('images')) {
                         $images = $request->file('images');
                         foreach ($images as $image) {
                             // Buat nama unik untuk setiap file gambar
@@ -194,7 +203,7 @@ class EventController extends Controller
                             $imageData = new imageSlideShow();
                             $imageData->event_id = $event->id; // Menghubungkan gambar dengan event
                             $imageData->filename = $filename;
-                            $imageData->filepath = $path;
+                            $imageData->filepath = $filename;
                             $imageData->save();
                         }
                     }
