@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>S . I . S . D . A . | Login</title>
+    <title>Sistem S . P . P . D | Login</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/lipis/flag-icons@6.6.6/css/flag-icons.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -73,14 +73,14 @@
                         </form>
 
                         <div class="separator">
-                            <small class="d-block text-center">Not Registered? <a href="/registrasi"> Registrasi Now</a>
+                            <small class="d-block text-center">Powered By</a>
                             </small>
                             <div class="clearfix"></div>
                             <br /><br />
                             <div>
                                 <a class="btn btn-link" href="#">
                                     <img class="img-thumbnail"
-                                        src=https://sisdainvapp.online/storage/images/LOGO%20SISDA.png
+                                        src={{ asset('images/LOGO_SISDA.png') }}
                                         alt="LOGO SISDA.png">
                                 </a>
                                 <p>Sistem Informasi Sumber Daya Air</p>
