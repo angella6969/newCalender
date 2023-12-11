@@ -7,6 +7,8 @@
                 <div id='calendar'></div>
             </div>
         </div>
+
+
         <div class="col-md-4 mt-3 mb-3">
             <div class="card h-100">
                 <Label class="d-flex justify-content-center mt-3">Daftar Event SPPD</Label>
@@ -68,6 +70,8 @@
             </div>
         </div>
 
+        <div id="eventPhotos" class="event-photos"></div>
+
     </div>
 
 
@@ -123,23 +127,22 @@
                         </table>
                     </table>
                     <div class="slideshow">
-                        {{-- <img src="{{ asset('/storage/images/1687160456_Screenshot 2023-04-14 102026.png') }}" alt="Slide"
-                            width="200" class="img-thumbnail ">
-                        <img src="{{ asset('/storage/images/1687153763_Untitled.png') }}" alt="Slide" width="200"
+                        {{-- <img src="{{ asset('/storage/images/1687233704_Screenshot 2023-04-14 102026.png') }}" alt="Slide"
+                            width="200" class="img-thumbnail "> --}}
+                        {{-- <img src="{{ asset('/storage/images/1687153763_Untitled.png') }}" alt="Slide" width="200"
                             class="img-thumbnail ">
                         <img src="{{ asset('/storage/images/1687153763_Untitled.png') }}" alt="Slide" width="200"
                             class="img-thumbnail ">
                         <img src="{{ asset('/storage/images/1687153763_Untitled.png') }}" alt="Slide" width="200"
                             class="img-thumbnail ">
                         <img src="{{ asset('/storage/images/1687153763_Untitled.png') }}" alt="Slide" width="200"
-                            class="img-thumbnail "> --}}
-                        {{-- <img src="{{ asset('/storage/ id="eventPhotos"') }}" alt="Slide" width="200"
+                            class="img-thumbnail ">
+                        <img src="{{ asset('/storage/ id="eventPhotos"') }}" alt="Slide" width="200"
                             class="img-thumbnail "> --}}
                         {{-- <img src="" id="eventPhotos" alt="Slide" width="200" class="img-thumbnail"> --}}
 
 
-                        <div id="eventPhotos" class="event-photos"></div>
-
+                        {{-- <div id="eventPhotos" class="event-photos"></div> --}}
                         <!-- Tambahkan elemen lainnya sesuai kebutuhan -->
                     </div>
 
@@ -170,6 +173,7 @@
     </div>
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
     <script>
         @if (Session::has('success'))
             iziToast.success({
@@ -179,8 +183,8 @@
             });
         @endif
     </script>
+
     <script>
-        // const modal = $('#modal-action')
         const csrfToken = $('meta[name=csrf_token]').attr('content')
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -208,8 +212,8 @@
                         method: 'GET',
                         success: function(response) {
                             var eventData = response.event;
-                            var personilData = response.personil;
                             var photosData = response.photos;
+                            var personilData = response.personil;
 
                             var eventPhotosContainer = document.getElementById(
                                 'eventPhotos');
@@ -258,6 +262,7 @@
                             // Menghapus konten foto sebelumnya
                             eventPhotosContainer.innerHTML = '';
 
+
                             // Menambahkan foto-foto ke dalam konten modal
 
                             if (eventData && eventData.photos && eventData.photos.length >
@@ -265,8 +270,7 @@
                                 eventData.photos.forEach(function(photo) {
                                     var imageElement = document.createElement(
                                         'img');
-                                    var imageUrl =
-                                        "{{ asset('/storage/images/') }}" + photo
+                                    var imageUrl = "/storage/images/" + photo
                                         .filepath;
                                     imageElement.src = imageUrl;
                                     imageElement.alt = photo.filename;
@@ -287,79 +291,7 @@
                     });
 
 
-                    // $.ajax({
-                    //     url: '/perjalanan/' + eventId,
-                    //     method: 'GET',
-                    //     success: function(response) {
-                    //         var eventData = response.event;
-                    //         var personilData = response.personil;
-                    //         var photosData = response
-                    //         .photos; // Tambahkan ini jika respons juga mengandung data foto
-
-                    //         var eventPhotosContainer = document.getElementById(
-                    //             'eventPhotos');
-                    //         var personilTableBody = document.getElementById(
-                    //             'personilTableBody');
-                    //         personilTableBody.innerHTML = '';
-
-                    //         personilData.forEach(function(personil) {
-                    //             var row = document.createElement('tr');
-                    //             var nameCell = document.createElement('td');
-                    //             nameCell.textContent = personil.name;
-                    //             row.appendChild(nameCell);
-
-                    //             personilTableBody.appendChild(row);
-                    //         });
-
-                    //         eventPhotosContainer.innerHTML = '';
-
-                    //         // Menggabungkan objek eventData dan photosData
-                    //         var mergedData = {
-                    //             event: eventData,
-                    //             photos: photosData[0].photos
-                    //         };
-
-                    //         // Menampilkan foto-foto dalam modal
-                    //         if (mergedData.photos && mergedData.photos.length > 0) {
-                    //             mergedData.photos.forEach(function(photo) {
-                    //                 var imageElement = document.createElement(
-                    //                 'img');
-                    //                 var imageUrl =
-                    //                     "{{ asset('/storage/images/') }}" + photo
-                    //                     .filepath;
-                    //                 imageElement.src = imageUrl;
-                    //                 imageElement.alt = photo.filename;
-                    //                 imageElement.classList.add('event-photo');
-
-                    //                 eventPhotosContainer.appendChild(imageElement);
-                    //             });
-                    //         } else {
-                    //             // Tangani jika tidak ada data foto
-                    //         }
-
-                    //         // Menampilkan informasi acara dalam modal
-                    //         document.getElementById('eventName').textContent = eventData
-                    //             .title;
-                    //         document.getElementById('eventStartDate').textContent =
-                    //             eventData.start_date;
-                    //         document.getElementById('eventEndDate').textContent = eventData
-                    //             .end_date;
-                    //         document.getElementById('eventAsal').textContent = eventData
-                    //             .asal;
-                    //         document.getElementById('eventTujuan').textContent = eventData
-                    //             .tujuan;
-                    //         document.getElementById('eventOutput').textContent = eventData
-                    //             .output;
-
-                    //         // Menampilkan modal
-                    //         $('#eventModal').modal('show');
-                    //     },
-                    //     error: function() {
-                    //         console.log('Gagal mengambil data event dari database.');
-                    //     }
-                    // });
                     document.getElementById('deleteEvent').addEventListener('click', function() {
-                        // Menampilkan modal konfirmasi
                         $('#confirmDeleteModal').modal('show');
                     });
 

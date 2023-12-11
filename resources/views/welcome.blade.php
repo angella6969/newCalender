@@ -8,7 +8,7 @@
     {{-- @include('layout.link') --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <title>Document</title>
+    <title>Monitoring SPPD</title>
 </head>
 
 <body>
@@ -77,7 +77,6 @@
 
     <div class="mt-3 " style="margin-left: 40px;">
         <h2 class="mb-3"> Keterangan : </h2>
-        {{-- <h4 class="mb-3" style="text-align: center;"> Unit Perjalanan <br> _____________________________<br> Tujuan Perjalanan </h4> --}}
         <div class="row" style="margin-left: 40px;">
             <div class="col-md-2 mt-3 mb-3">
                 <h6> JKT : Jakarta</h6>

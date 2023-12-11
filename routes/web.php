@@ -22,6 +22,9 @@ use Illuminate\Support\Facades\Route;
 route::get('/access_denied', function () {
     return view('access_denied');
 });
+route::get('/new-content', function () {
+    return view('content/newContent');
+});
 Route::get('/', function () {
     return redirect()->route('login');
 });

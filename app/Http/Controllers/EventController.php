@@ -29,9 +29,9 @@ class EventController extends Controller
         $userEvent = EventSPPD::whereIn('id', $eventUser)->latest()->paginate(10);
 
         $photos = imageSlideShow::all();
-        // dd($photos);
+        // dd("masuk");
 
-        return view('content.calender', [
+        return view('content.newContent', [
             'userEvent' =>  $userEvent,
             'event' => EventSPPD::orderBy('start_date', 'asc')
                 ->Filter(request(['search']))
@@ -39,27 +39,6 @@ class EventController extends Controller
             'date_now' =>  Carbon::now()
         ]);
     }
-
-    // public function listEvent(Request $request)
-    // {
-    //     $start = date('Y-m-d', strtotime($request->start));
-    //     $end = date('Y-m-d', strtotime($request->end));
-
-    //     $events = EventSPPD::where('start_date', '>=', $start)
-    //         ->where('end_date', '<=', $end)->get()
-    //         ->map(fn ($item) => [
-    //             'id' => $item->id,
-    //             'title' => $item->title,
-    //             'start' => $item->start_date,
-    //             'end' => date('Y-m-d', strtotime($item->end_date . '+1 days')),
-    //             'category' => $item->category,
-    //             // 'eventColor'=> '#378006',
-    //             // 'className' => ['bg-' . $item->category]
-    //             'className' => [$item->category]
-    //         ]);
-
-    //     return response()->json($events);
-    // }
 
     public function listEvent(Request $request)
     {
@@ -83,6 +62,7 @@ class EventController extends Controller
                 // Ambil foto terkait dari tabel imageSlideShow
                 $photos = $item->photos->map(function ($photo) {
                     return [
+                        'fileid' => $photo->event_id,
                         'filename' => $photo->filename,
                         'filepath' => $photo->filepath
                     ];

@@ -6,7 +6,7 @@
                 <span data-feather="menu"></span> </a>
         </li>
         <li class="nav-item d-none d-sm-inline-block ">
-            <a href="#" class="nav-link">Home</a>
+            <a href="/events" class="nav-link">Home</a>
         </li>
     </ul>
 </nav>
